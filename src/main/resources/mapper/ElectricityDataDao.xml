@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zust.dao.ElectricityDataDao">
+
+    <resultMap id="BaseResultMap" type="com.zust.entity.ElectricityData">
+        <!--@Table electricity_data-->
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="devId" column="dev_id" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="insVoltage" column="ins_voltage" jdbcType="OTHER"/>
+        <result property="insCurrent" column="ins_current" jdbcType="OTHER"/>
+        <result property="insPower" column="ins_power" jdbcType="OTHER"/>
+    </resultMap>
+
+    <!--通过日期查询一个集合-->
+    <select id="queryByDate" resultMap="BaseResultMap">
+        SELECT *,HOUR(electricity_data.create_time) FROM electricity_data
+        WHERE create_time BETWEEN #{start} AND #{end} AND dev_id = #{devId}
+        GROUP BY HOUR(electricity_data.create_time)
+    </select>
+
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="BaseResultMap">
+        select
+          id, dev_id, create_time, ins_voltage, ins_current, ins_power
+        from electricity_consumption.electricity_data
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="BaseResultMap">
+        select
+          id, dev_id, create_time, ins_voltage, ins_current, ins_power
+        from electricity_consumption.electricity_data
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="BaseResultMap">
+        select
+          id, dev_id, create_time, ins_voltage, ins_current, ins_power
+        from electricity_consumption.electricity_data
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="devId != null">
+                and dev_id = #{devId}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="insVoltage != null">
+                and ins_voltage = #{insVoltage}
+            </if>
+            <if test="insCurrent != null">
+                and ins_current = #{insCurrent}
+            </if>
+            <if test="insPower != null">
+                and ins_power = #{insPower}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into electricity_consumption.electricity_data(dev_id, create_time, ins_voltage, ins_current, ins_power)
+        values (#{devId}, #{createTime}, #{insVoltage}, #{insCurrent}, #{insPower})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update electricity_consumption.electricity_data
+        <set>
+            <if test="devId != null">
+                dev_id = #{devId},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="insVoltage != null">
+                ins_voltage = #{insVoltage},
+            </if>
+            <if test="insCurrent != null">
+                ins_current = #{insCurrent},
+            </if>
+            <if test="insPower != null">
+                ins_power = #{insPower},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from electricity_consumption.electricity_data where id = #{id}
+    </delete>
+
+</mapper>

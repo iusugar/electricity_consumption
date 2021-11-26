@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zust.dao.DeviceDao">
+
+    <resultMap id="BaseResultMap" type="com.zust.entity.Device">
+        <!--@Table device-->
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="deviceId" column="device_id" jdbcType="VARCHAR"/>
+        <result property="usageDesc" column="usage_desc" jdbcType="VARCHAR"/>
+        <result property="ratedVoltage" column="rated_voltage" jdbcType="OTHER"/>
+        <result property="ratedCurrent" column="rated_current" jdbcType="OTHER"/>
+        <result property="ratedPower" column="rated_power" jdbcType="OTHER"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="voltageMonitor" column="voltage_monitor" jdbcType="OTHER"/>
+        <result property="currentMonitor" column="current_monitor" jdbcType="OTHER"/>
+        <result property="powerMonitor" column="power_monitor" jdbcType="OTHER"/>
+        <result property="remoteControl" column="remote_control" jdbcType="OTHER"/>
+        <result property="elecConsum" column="elec_consum" jdbcType="OTHER"/>
+        <result property="infraredFunc" column="Infrared_func" jdbcType="OTHER"/>
+    </resultMap>
+
+    <select id="queryByRoomNum" resultMap="BaseResultMap">
+        select * from `device`
+        where `device`.id in (
+            select dev_id from `device_status`
+            where `device_status`.loca_id in (
+                select id from `location`
+                where `location`.room_id = (
+                       select id from `room`
+                       where `room`.`name` = #{roomNum})))
+    </select>
+
+    <!--根据devId查询单个-->
+    <select id="queryByDevId" resultMap="BaseResultMap">
+        select
+            id, device_id, usage_desc, rated_voltage, rated_current, rated_power, create_time
+        from electricity_consumption.device
+        where device_id = #{devId}
+    </select>
+
+    <!---->
+    <!--查询单个-->
+    <select id="queryById" resultMap="BaseResultMap">
+        select
+          id, device_id, usage_desc, rated_voltage, rated_current, rated_power, create_time, voltage_monitor, current_monitor, power_monitor, remote_control, elec_consum, Infrared_func
+        from electricity_consumption.device
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="BaseResultMap">
+        select
+          id, device_id, usage_desc, rated_voltage, rated_current, rated_power, create_time, voltage_monitor, current_monitor, power_monitor, remote_control, elec_consum, Infrared_func
+        from electricity_consumption.device
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="BaseResultMap">
+        select
+          id, device_id, usage_desc, rated_voltage, rated_current, rated_power, create_time, voltage_monitor, current_monitor, power_monitor, remote_control, elec_consum, Infrared_func
+        from electricity_consumption.device
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="deviceId != null and deviceId != ''">
+                and device_id = #{deviceId}
+            </if>
+            <if test="usageDesc != null and usageDesc != ''">
+                and usage_desc = #{usageDesc}
+            </if>
+            <if test="ratedVoltage != null">
+                and rated_voltage = #{ratedVoltage}
+            </if>
+            <if test="ratedCurrent != null">
+                and rated_current = #{ratedCurrent}
+            </if>
+            <if test="ratedPower != null">
+                and rated_power = #{ratedPower}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="voltageMonitor != null">
+                and voltage_monitor = #{voltageMonitor}
+            </if>
+            <if test="currentMonitor != null">
+                and current_monitor = #{currentMonitor}
+            </if>
+            <if test="powerMonitor != null">
+                and power_monitor = #{powerMonitor}
+            </if>
+            <if test="remoteControl != null">
+                and remote_control = #{remoteControl}
+            </if>
+            <if test="elecConsum != null">
+                and elec_consum = #{elecConsum}
+            </if>
+            <if test="infraredFunc != null">
+                and Infrared_func = #{infraredFunc}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into electricity_consumption.device(device_id, usage_desc, rated_voltage, rated_current, rated_power, create_time, voltage_monitor, current_monitor, power_monitor, remote_control, elec_consum, Infrared_func)
+        values (#{deviceId}, #{usageDesc}, #{ratedVoltage}, #{ratedCurrent}, #{ratedPower}, #{createTime}, #{voltageMonitor}, #{currentMonitor}, #{powerMonitor}, #{remoteControl}, #{elecConsum}, #{infraredFunc})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update electricity_consumption.device
+        <set>
+            <if test="deviceId != null and deviceId != ''">
+                device_id = #{deviceId},
+            </if>
+            <if test="usageDesc != null and usageDesc != ''">
+                usage_desc = #{usageDesc},
+            </if>
+            <if test="ratedVoltage != null">
+                rated_voltage = #{ratedVoltage},
+            </if>
+            <if test="ratedCurrent != null">
+                rated_current = #{ratedCurrent},
+            </if>
+            <if test="ratedPower != null">
+                rated_power = #{ratedPower},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="voltageMonitor != null">
+                voltage_monitor = #{voltageMonitor},
+            </if>
+            <if test="currentMonitor != null">
+                current_monitor = #{currentMonitor},
+            </if>
+            <if test="powerMonitor != null">
+                power_monitor = #{powerMonitor},
+            </if>
+            <if test="remoteControl != null">
+                remote_control = #{remoteControl},
+            </if>
+            <if test="elecConsum != null">
+                elec_consum = #{elecConsum},
+            </if>
+            <if test="infraredFunc != null">
+                Infrared_func = #{infraredFunc},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from electricity_consumption.device where id = #{id}
+    </delete>
+
+</mapper>
