@@ -2,6 +2,7 @@ package com.zust.dto;
 
 import lombok.Data;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -25,6 +26,9 @@ public class DeviceDto {
   */
   private String usageDesc;
 
+	/**
+	 * 空间位置
+	 */
   private String buildNum;
   private String roomNum;
   private String location;
@@ -41,6 +45,8 @@ public class DeviceDto {
   * 额定功率
   */
   private float ratedPower;
+
+	private Date createTime;
 
   private List<String> checkedFunctions;
 

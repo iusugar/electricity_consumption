@@ -9,7 +9,7 @@ import javax.annotation.Resource;
 /**
  * (DeviceStatus)表控制层
  *
- * @author makejava
+ * @author iusugar
  * @since 2021-11-26 14:15:13
  */
 @RestController

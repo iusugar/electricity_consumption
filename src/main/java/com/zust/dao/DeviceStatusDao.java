@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * (DeviceStatus)表数据库访问层
  *
- * @author makejava
+ * @author iusugar
  * @since 2021-11-26 14:15:13
  */
 public interface DeviceStatusDao {

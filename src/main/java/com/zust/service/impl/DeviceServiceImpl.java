@@ -5,6 +5,7 @@ import com.zust.dao.LocationDao;
 import com.zust.dao.RoomDao;
 import com.zust.dto.DeviceDto;
 import com.zust.dto.LocationDto;
+import com.zust.dto.RoomDto;
 import com.zust.entity.Device;
 import com.zust.dao.DeviceDao;
 import com.zust.entity.DeviceStatus;
@@ -26,7 +27,7 @@ import java.util.stream.Collectors;
 /**
 * (Device)表服务实现类
 *
-* @author makejava
+* @author iusugar
 * @since 2021-11-18 16:01:42
 */
 @Service("deviceService")
@@ -40,6 +41,33 @@ public class DeviceServiceImpl implements DeviceService {
 	@Resource
 	private DeviceStatusDao deviceStatusDao;
 
+
+	/**
+	 * 查询所有设备
+	 *
+	 * @return 所有设备对象集合
+	 */
+	@Override
+	public List<DeviceDto> getAllDevice() {
+		List<Device> deviceList = deviceDao.queryAllDevice();
+		List<RoomDto> roomDtoList;
+		List<DeviceDto> dtoList = new ArrayList<>();
+		if (deviceList != null && deviceList.size() > 0) {
+			List<Integer> idList = deviceList.stream().map(device -> device.getId()).collect(Collectors.toList());
+			roomDtoList = roomDao.queryByDevIdList(idList);
+			for (int i = 0; i < deviceList.size(); i++) {
+				DeviceDto deviceDto = new DeviceDto();
+				BeanUtils.copyProperties(deviceList.get(i),deviceDto);
+				String buildNum = roomDtoList.get(i).getName().substring(0,roomDtoList.get(i).getName().indexOf("-"));
+				String roomNum = roomDtoList.get(i).getName().substring(roomDtoList.get(i).getName().indexOf("-") + 1);
+				deviceDto.setBuildNum(buildNum);
+				deviceDto.setRoomNum(roomNum);
+				deviceDto.setLocation(roomDtoList.get(i).getPosition());
+				dtoList.add(deviceDto);
+			}
+		}
+		return dtoList;
+	}
 
 	/**
 	 * 根据房间门牌号查询

@@ -1,5 +1,6 @@
 package com.zust.dao;
 
+import com.zust.dto.RoomDto;
 import com.zust.entity.Room;
 import org.apache.ibatis.annotations.Param;
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
  */
 public interface RoomDao {
 
-
+	List<RoomDto> queryByDevIdList(List<Integer> devIdList);
 
 	/**
 	 * 通过楼的编号查询单条数据

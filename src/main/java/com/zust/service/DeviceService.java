@@ -13,6 +13,12 @@ import java.util.List;
 public interface DeviceService {
 
 	/**
+	 * 查询所有设备
+	 * @return 所有设备对象集合
+	 */
+	List<DeviceDto> getAllDevice();
+
+	/**
 	 * 根据房间门牌号查询
 	 * @param roomNum 房间门牌号
 	 * @return 对象列表

@@ -19,6 +19,13 @@
         <result property="infraredFunc" column="Infrared_func" jdbcType="OTHER"/>
     </resultMap>
 
+    <select id="queryAllDevice" resultMap="BaseResultMap">
+        select
+            id, device_id, usage_desc, rated_voltage, rated_current, rated_power, create_time, voltage_monitor, current_monitor, power_monitor, remote_control, elec_consum, Infrared_func
+        from device
+    </select>
+
+    <!--通过房间号查询-->
     <select id="queryByRoomNum" resultMap="BaseResultMap">
         select * from `device`
         where `device`.id in (
@@ -33,7 +40,7 @@
     <!--根据devId查询单个-->
     <select id="queryByDevId" resultMap="BaseResultMap">
         select
-            id, device_id, usage_desc, rated_voltage, rated_current, rated_power, create_time
+            id, device_id, usage_desc, rated_voltage, rated_current, rated_power, create_time, voltage_monitor, current_monitor, power_monitor, remote_control, elec_consum, Infrared_func
         from electricity_consumption.device
         where device_id = #{devId}
     </select>

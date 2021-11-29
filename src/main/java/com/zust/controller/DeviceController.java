@@ -55,4 +55,16 @@ public class DeviceController {
 	public List<DeviceDto> getDeviceByRoom(String room) {
 		return deviceService.queryByRoomNum(room);
 	}
+
+	@GetMapping("getAllDevice")
+	public List<DeviceDto> getAllDevice() {
+    System.out.println("获取");
+		return deviceService.getAllDevice();
+	}
+
+	@GetMapping("getDeviceList")
+	public List<DeviceDto> getDeviceList(@RequestBody(required = false) DeviceDto deviceDto) {
+    System.out.println(deviceDto);
+		return null;
+	}
 }

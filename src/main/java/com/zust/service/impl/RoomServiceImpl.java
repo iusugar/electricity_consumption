@@ -1,5 +1,6 @@
 package com.zust.service.impl;
 
+import com.zust.dto.RoomDto;
 import com.zust.entity.Room;
 import com.zust.dao.RoomDao;
 import com.zust.service.RoomService;
@@ -19,7 +20,17 @@ public class RoomServiceImpl implements RoomService {
   @Resource
   private RoomDao roomDao;
 
-  /**
+	/**
+	 * 查询有设备存在的所有房间集合
+	 *
+	 * @return 传输对象集合
+	 */
+	@Override
+	public List<RoomDto> getAllRoomByDevIdList(List<Integer> devIdList) {
+		return roomDao.queryByDevIdList(devIdList);
+	}
+
+	/**
    * 添加新的房间
    */
   public String insert(List<String> l) {

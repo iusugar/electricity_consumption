@@ -107,6 +107,7 @@ public class MyMqttCallback implements MqttCallbackExtended {
   }
 
   public void handleMqttMessage(MqttMessage message) throws JsonProcessingException {
+		// 转json
     ObjectMapper mapper = new ObjectMapper();
     Map<String,String> result = mapper.readValue(message.toString(), new TypeReference<Map<String,String>>(){});
     Device device = myMqttCallback.deviceService.queryByDeviceId(result.get("deviceID"));
@@ -116,6 +117,7 @@ public class MyMqttCallback implements MqttCallbackExtended {
     ed.setInsVoltage(result.get("U"));
     ed.setInsCurrent(result.get("I"));
     ed.setInsPower(result.get("P"));
+		ed.setConsumption(result.get("Ph"));
     myMqttCallback.electricityDataService.insert(ed);
     flag = 0;
 //    System.out.println(result);

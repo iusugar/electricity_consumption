@@ -13,28 +13,32 @@ import java.io.Serializable;
  */
 @Data
 public class ElectricityData implements Serializable {
-    private static final long serialVersionUID = -44927854190774693L;
-    
-    private Integer id;
-    /**
-    * 插座id
-    */
-    private Integer devId;
-    /**
-    * 定时获取数据的时间
-    */
-    private Date createTime;
-    /**
-    * 瞬时电压
-    */
-    private Object insVoltage;
-    /**
-    * 瞬时电流
-    */
-    private Object insCurrent;
-    /**
-    * 瞬时电流
-    */
-    private Object insPower;
+  private static final long serialVersionUID = -44927854190774693L;
+
+  private Integer id;
+  /**
+  * 插座id
+  */
+  private Integer devId;
+  /**
+  * 定时获取数据的时间
+  */
+  private Date createTime;
+  /**
+  * 瞬时电压
+  */
+  private Object insVoltage;
+  /**
+  * 瞬时电流
+  */
+  private Object insCurrent;
+  /**
+   * 瞬时电流
+   */
+  private Object insPower;
+	/**
+	 * 用电量
+	 */
+	private Object consumption;
 
 }

@@ -1,7 +1,11 @@
 package com.zust;
 
+import com.zust.dao.DeviceDao;
 import com.zust.dao.ElectricityDataDao;
 import com.zust.dao.LocationDao;
+import com.zust.dao.RoomDao;
+import com.zust.dto.RoomDto;
+import com.zust.entity.Device;
 import com.zust.entity.ElectricityData;
 import com.zust.service.LocationService;
 import org.junit.jupiter.api.Test;
@@ -16,6 +20,10 @@ class ElectricityConsumptionApplicationTests {
 
 	@Resource
 	ElectricityDataDao ed;
+	@Resource
+	DeviceDao deviceDao;
+	@Resource
+	RoomDao roomDao;
 
   @Test
   void contextLoads() {
@@ -32,5 +40,20 @@ class ElectricityConsumptionApplicationTests {
 		String end = new SimpleDateFormat("yyyy-MM-dd 23:59:59").format(yesterday);
 		List<ElectricityData> l = ed.queryByDate(start,end,57);
     System.out.println(l);
+	}
+
+	@Test
+	void getAllDevice() {
+		Device d = new Device();
+		d.setId(40);
+		List<Device> l = deviceDao.queryAll(d);
+    System.out.println("L的长度" + l.size());
+    System.out.println(l);
+	}
+
+	@Test
+	void getRoomByDevIdList() {
+//		List<RoomDto> rDto = roomDao.queryByDevIdList();
+//    rDto.forEach(System.out::println);
 	}
 }

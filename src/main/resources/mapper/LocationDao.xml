@@ -9,16 +9,17 @@
         <result property="position" column="position" jdbcType="VARCHAR"/>
         <result property="description" column="description" jdbcType="VARCHAR"/>
     </resultMap>
-    <resultMap id="ContainDeviceResultMap" type="com.zust.dto.LocationDto">
+    <resultMap id="DtoResultMap" type="com.zust.dto.LocationDto">
         <!--@location dto-->
         <result property="id" column="id" jdbcType="INTEGER"/>
         <result property="roomId" column="room_id" jdbcType="INTEGER"/>
         <result property="position" column="position" jdbcType="VARCHAR"/>
         <result property="description" column="description" jdbcType="VARCHAR"/>
         <result property="devId" column="dev_id" jdbcType="INTEGER"/>
+        <result property="roomName" column="name" jdbcType="VARCHAR"/>
     </resultMap>
 
-    <select id="queryByDevIdList" resultMap="ContainDeviceResultMap">
+    <select id="queryByDevIdList" resultMap="DtoResultMap">
         select `location`.*,`device_status`.dev_id
         from `location`,`device_status`
         where `location`.id = `device_status`.loca_id

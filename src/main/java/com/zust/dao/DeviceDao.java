@@ -13,6 +13,12 @@ import java.util.List;
 public interface DeviceDao {
 
 	/**
+	 *
+	 * @return 所有实例对象集合
+	 */
+	List<Device> queryAllDevice();
+
+	/**
 	 * 通过房间号查询
 	 * @param roomNum 房间门牌号
 	 * @return 返回对象列表

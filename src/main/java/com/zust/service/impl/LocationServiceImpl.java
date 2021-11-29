@@ -14,7 +14,7 @@ import java.util.Map;
 /**
 	* (Location)表服务实现类
 	*
-	* @author makejava
+	* @author iusugar
 	* @since 2021-11-18 16:01:42
 */
 @Service("locationService")
@@ -29,7 +29,7 @@ public class LocationServiceImpl implements LocationService {
 	 * @return 带设备ID的位置列表
 	 */
 	@Override
-	public List<LocationDto> queryByDevIdList(List<Integer> l) {
+	public List<LocationDto> getLocationByDevIdList(List<Integer> l) {
     System.out.println("执行queryByDevIdList");
 		List<LocationDto> m =locationDao.queryByDevIdList(l);
     System.out.println(m);

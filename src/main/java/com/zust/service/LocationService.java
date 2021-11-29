@@ -18,7 +18,7 @@ public interface LocationService {
 	 * @param l 设备主键ID列表
 	 * @return 带设备ID的位置列表
 	 */
-	List<LocationDto> queryByDevIdList(List<Integer> l);
+	List<LocationDto> getLocationByDevIdList(List<Integer> l);
 
 	/**
 	 *
