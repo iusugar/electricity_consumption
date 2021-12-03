@@ -3,9 +3,12 @@ package com.zust.mqtt;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.zust.dao.DeviceStatusDao;
 import com.zust.entity.Device;
+import com.zust.entity.DeviceStatus;
 import com.zust.entity.ElectricityData;
 import com.zust.service.DeviceService;
+import com.zust.service.DeviceStatusService;
 import com.zust.service.ElectricityDataService;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -14,10 +17,10 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import java.util.Date;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.nio.channels.NonWritableChannelException;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Slf4j
 @Component
@@ -31,14 +34,16 @@ public class MyMqttCallback implements MqttCallbackExtended {
   public String[] topics;
   public int[] qos;
 
-  private static Timer timer;
-  private static int flag = 0;
+  private static Timer dataTimer;
+  private static int saveDataFlag = 0;
   int messageCount = 0;
 
   @Resource
   private ElectricityDataService electricityDataService;
   @Resource
   private DeviceService deviceService;
+	@Resource
+	private DeviceStatusService statusService;
 
   private static MyMqttCallback myMqttCallback;
 
@@ -57,16 +62,16 @@ public class MyMqttCallback implements MqttCallbackExtended {
     myMqttCallback = this;
     myMqttCallback.electricityDataService = this.electricityDataService;
     myMqttCallback.deviceService = this.deviceService;
-    timer = new Timer();
+	  dataTimer = new Timer();
   }
 
   @Override
   public void connectComplete(boolean b, String s) {
     log.info("完成连接");
-    timer.schedule(new TimerTask() {
+	  dataTimer.schedule(new TimerTask() {
       @Override
       public void run() {
-        flag = 1;
+        saveDataFlag = 1;
       }
     },0,2 * 60 * 1000);
   }
@@ -88,14 +93,15 @@ public class MyMqttCallback implements MqttCallbackExtended {
   public void messageArrived(String s, MqttMessage mqttMessage) throws Exception {
     switch (s) {
       case TOPIC_1: {
-        if (flag == 1) {
-          handleMqttMessage(mqttMessage);
+        if (saveDataFlag == 1) {
+          handleDataMessage(mqttMessage);
         }
         break;
       }
-      case TOPIC_2:
-        System.out.println(2);
-        break;
+      case TOPIC_2: {
+				handleStateMessage(mqttMessage);
+				break;
+      }
     }
     messageCount++;
 //    System.out.println("消息数量:" + messageCount);
@@ -106,7 +112,7 @@ public class MyMqttCallback implements MqttCallbackExtended {
     System.out.println("delivery");
   }
 
-  public void handleMqttMessage(MqttMessage message) throws JsonProcessingException {
+  public void handleDataMessage(MqttMessage message) throws JsonProcessingException {
 		// 转json
     ObjectMapper mapper = new ObjectMapper();
     Map<String,String> result = mapper.readValue(message.toString(), new TypeReference<Map<String,String>>(){});
@@ -119,7 +125,33 @@ public class MyMqttCallback implements MqttCallbackExtended {
     ed.setInsPower(result.get("P"));
 		ed.setConsumption(result.get("Ph"));
     myMqttCallback.electricityDataService.insert(ed);
-    flag = 0;
-//    System.out.println(result);
+    saveDataFlag = 0;
+    System.out.println(result);
   }
+
+	public void handleStateMessage(MqttMessage stateMsg) throws JsonProcessingException {
+//        \{([^{}]*)\}
+		String stateString = stateMsg.toString();
+		Pattern pattern = Pattern.compile("\\{([^{}]*)\\}");
+		Matcher matcher = pattern.matcher(stateString);
+		List<String> stateList = new ArrayList<>();
+		while (matcher.find()) {
+			stateList.add(matcher.group());
+		}
+
+		ObjectMapper mapper = new ObjectMapper();
+    for (String state : stateList) {
+	    Map<String,String> result = mapper.readValue(state, new TypeReference<Map<String, String>>(){});
+			Device device = null;
+			if (result != null) {
+				device = myMqttCallback.deviceService.queryByDeviceId(result.get("id"));
+			}
+			if (device != null) {
+				DeviceStatus deviceStatus = myMqttCallback.statusService.queryByDevId(device.getId());
+				deviceStatus.setLastUseTime(new Date());
+				deviceStatus.setCurrentState(result.get("status"));
+				myMqttCallback.statusService.update(deviceStatus);
+			}
+    }
+	}
 }

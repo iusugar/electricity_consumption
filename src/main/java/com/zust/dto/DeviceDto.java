@@ -33,6 +33,11 @@ public class DeviceDto {
   private String roomNum;
   private String location;
 
+	/**
+	 * 当前状态
+	 */
+	private Object currentState;
+
   /**
   * 额定电压
   */

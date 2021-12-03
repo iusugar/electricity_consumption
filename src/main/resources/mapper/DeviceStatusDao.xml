@@ -12,6 +12,13 @@
         <result property="gwId" column="gw_id" jdbcType="INTEGER"/>
     </resultMap>
 
+    <select id="queryByDevId" resultMap="BaseResultMap">
+        select
+          id, dev_id, last_use_time, current_state, loca_id, gw_id
+        from device_status
+        where dev_id = #{devId}
+    </select>
+
     <!--查询单个-->
     <select id="queryById" resultMap="BaseResultMap">
         select

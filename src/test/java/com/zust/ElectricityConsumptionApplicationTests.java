@@ -1,11 +1,10 @@
 package com.zust;
 
-import com.zust.dao.DeviceDao;
-import com.zust.dao.ElectricityDataDao;
-import com.zust.dao.LocationDao;
-import com.zust.dao.RoomDao;
+import com.zust.dao.*;
+import com.zust.dto.DeviceDto;
 import com.zust.dto.RoomDto;
 import com.zust.entity.Device;
+import com.zust.entity.DeviceStatus;
 import com.zust.entity.ElectricityData;
 import com.zust.service.LocationService;
 import org.junit.jupiter.api.Test;
@@ -24,6 +23,8 @@ class ElectricityConsumptionApplicationTests {
 	DeviceDao deviceDao;
 	@Resource
 	RoomDao roomDao;
+	@Resource
+	DeviceStatusDao dsDao;
 
   @Test
   void contextLoads() {
@@ -52,8 +53,14 @@ class ElectricityConsumptionApplicationTests {
 	}
 
 	@Test
-	void getRoomByDevIdList() {
-//		List<RoomDto> rDto = roomDao.queryByDevIdList();
-//    rDto.forEach(System.out::println);
+	void getRoomByOptions() {
+//		List<DeviceDto> list = deviceDao.queryByOptions("实体","2f","A2");
+//    list.forEach(System.out::println);
+	}
+
+	@Test
+	void getStatus() {
+		DeviceStatus ds = dsDao.queryByDevId(65);
+    System.out.println(ds.getCurrentState());
 	}
 }

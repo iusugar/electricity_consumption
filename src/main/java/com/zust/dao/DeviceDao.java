@@ -1,5 +1,6 @@
 package com.zust.dao;
 
+import com.zust.dto.DeviceDto;
 import com.zust.entity.Device;
 import org.apache.ibatis.annotations.Param;
 import java.util.List;
@@ -11,6 +12,15 @@ import java.util.List;
  * @since 2021-11-18 16:01:42
  */
 public interface DeviceDao {
+
+	/**
+	 * 通过条件查询
+	 * @param usageDesc 使用描述
+	 * @param deviceId 24位设备ID
+	 * @param roomNum 房间号
+	 * @return 实例对象集合
+	 */
+	List<DeviceDto> queryByOptions(String usageDesc, String deviceId, String roomNum);
 
 	/**
 	 *

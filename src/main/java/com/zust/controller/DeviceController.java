@@ -58,13 +58,19 @@ public class DeviceController {
 
 	@GetMapping("getAllDevice")
 	public List<DeviceDto> getAllDevice() {
-    System.out.println("获取");
 		return deviceService.getAllDevice();
 	}
 
 	@GetMapping("getDeviceList")
-	public List<DeviceDto> getDeviceList(@RequestBody(required = false) DeviceDto deviceDto) {
-    System.out.println(deviceDto);
-		return null;
+	public List<DeviceDto> getDeviceList(DeviceDto dto) {
+		return deviceService.getByOptions(dto.getUsageDesc(),dto.getDeviceId(),dto.getBuildNum(),dto.getRoomNum());
 	}
+
+	@PutMapping("update")
+	public String updateDevice(@RequestBody(required = false)DeviceDto deviceDto) {
+    System.out.println(deviceDto);
+		return deviceService.updateDevice(deviceDto);
+	}
+
+
 }

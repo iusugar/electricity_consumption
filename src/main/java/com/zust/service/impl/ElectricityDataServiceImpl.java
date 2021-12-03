@@ -38,9 +38,6 @@ public class ElectricityDataServiceImpl implements ElectricityDataService {
 		String start = new SimpleDateFormat("yyyy-MM-dd 00:00:00").format(yesterday);
 		String end = new SimpleDateFormat("yyyy-MM-dd 23:59:59").format(yesterday);
 		List<ElectricityData> l = electricityDataDao.queryByDate(start,end,devId);
-		for (ElectricityData data : l) {
-      System.out.println(data.getCreateTime());
-		}
 		return l;
 	}
 

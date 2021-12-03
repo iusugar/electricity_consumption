@@ -7,14 +7,38 @@ import java.util.List;
 /**
  * (Device)表服务接口
  *
- * @author makejava
+ * @author iusuagr
  * @since 2021-11-18 16:01:42
  */
 public interface DeviceService {
 
 	/**
+	 * 通过设备ID删除
+	 * @param deviceId 设备ID
+	 * @return 是否成功
+	 */
+	String deleteByDeviceId(String deviceId);
+
+	/**
+	 * 更新设备信息
+	 * @param deviceDto 数据传输对象
+	 * @return 更新成功或失败消息
+	 */
+	String updateDevice(DeviceDto deviceDto);
+
+	/**
+	 * 通过条件查询
+	 * @param usageDesc 用途
+	 * @param deviceId 设备ID
+	 * @param buildNum 楼号
+	 * @param roomNum 房间号
+	 * @return 符合条件的实例对象集合
+	 */
+	List<DeviceDto> getByOptions(String usageDesc, String deviceId, String buildNum, String roomNum);
+
+	/**
 	 * 查询所有设备
-	 * @return 所有设备对象集合
+	 * @return 所有实例对象集合
 	 */
 	List<DeviceDto> getAllDevice();
 

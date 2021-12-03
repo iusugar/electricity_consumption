@@ -13,11 +13,14 @@ import com.zust.entity.Location;
 import com.zust.entity.Room;
 import com.zust.service.DeviceService;
 import com.zust.service.LocationService;
+import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.javassist.expr.NewArray;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.xml.stream.events.DTD;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -30,6 +33,7 @@ import java.util.stream.Collectors;
 * @author iusugar
 * @since 2021-11-18 16:01:42
 */
+@Slf4j
 @Service("deviceService")
 public class DeviceServiceImpl implements DeviceService {
   @Resource
@@ -41,6 +45,80 @@ public class DeviceServiceImpl implements DeviceService {
 	@Resource
 	private DeviceStatusDao deviceStatusDao;
 
+
+	/**
+	 * 通过设备ID删除
+	 *
+	 * @param deviceId 设备ID
+	 * @return 是否成功
+	 */
+	@Override
+	public String deleteByDeviceId(String deviceId) {
+		deviceDao.queryByDevId(deviceId);
+		return null;
+	}
+
+	/**
+	 * 更新设备信息
+	 *
+	 * @param deviceDto 数据传输对象
+	 * @return 更新成功或失败消息
+	 */
+	@Override
+	public String updateDevice(DeviceDto deviceDto) {
+		Device device = deviceDao.queryByDevId(deviceDto.getDeviceId());
+		Room room = roomDao.queryByBuildingNum(deviceDto.getBuildNum() + "-" + deviceDto.getRoomNum());
+    DeviceStatus deviceStatus = deviceStatusDao.queryByDevId(device.getId());
+		Location location = locationDao.queryByRoomIdPosition(room.getId(), deviceDto.getLocation());
+		// 判断是否为空 如果位置不存在就新建
+		if (location == null) {
+			Location l = new Location();
+			l.setRoomId(room.getId());
+			l.setPosition(deviceDto.getLocation());
+			locationDao.insert(l);
+			deviceStatus.setLocaId(l.getId());
+			deviceStatusDao.update(deviceStatus);
+		} else {
+			if (Objects.equals(deviceStatus.getLocaId(), location.getId())) {
+				log.info("相同位置");
+				return "same";
+			} else {
+				deviceStatus.setLocaId(location.getId());
+				deviceStatusDao.update(deviceStatus);
+			}
+		}
+		return "success";
+	}
+
+	/**
+	 * 通过条件查询
+	 * @param usageDesc 用途
+	 * @param deviceId 设备ID
+	 * @param buildNum 楼号
+	 * @param roomNum 房间号
+	 * @return 符合条件的实例对象集合
+	 */
+	@Override
+	public List<DeviceDto> getByOptions(String usageDesc, String deviceId, String buildNum, String roomNum) {
+		String location = "";
+		if (buildNum != null && !buildNum.equals("") && roomNum !=null && !roomNum.equals("")) {
+			location = buildNum + "-" + roomNum;
+		} else if (buildNum != null && !buildNum.equals("")) {
+			location = buildNum;
+		} else {
+			location = roomNum;
+		}
+		List<DeviceDto> deviceDtoList = deviceDao.queryByOptions(usageDesc,deviceId,location);
+		if (deviceDtoList != null) {
+			deviceDtoList.forEach(dto -> {
+				dto.setBuildNum(dto.getRoomNum().substring(0,dto.getRoomNum().indexOf("-")));
+				String num = dto.getRoomNum().substring(dto.getRoomNum().indexOf("-") + 1);
+				dto.setRoomNum(num);
+			});
+		}
+//		deviceDtoList.forEach(System.out::println);
+		return deviceDtoList;
+	}
 
 	/**
 	 * 查询所有设备
@@ -82,7 +160,6 @@ public class DeviceServiceImpl implements DeviceService {
 		List<DeviceDto> dtoList = new ArrayList<>();
 		if (l != null && l.size() > 0) {
 			List<Integer> idList = l.stream().map(device -> device.getId()).collect(Collectors.toList());
-			List<LocationDto> locationDtoList = locationDao.queryByDevIdList(idList);
 			for (Device device : l) {
 				DeviceDto deviceDto = new DeviceDto();
 				BeanUtils.copyProperties(device, deviceDto);
@@ -91,8 +168,10 @@ public class DeviceServiceImpl implements DeviceService {
 				dtoList.add(deviceDto);
 			}
 			dtoList.sort((a,b) -> Integer.compare(a.getId(),b.getId()));
+			List<LocationDto> locationDtoList = locationDao.queryByDevIdList(idList);
 			for (int i = 0; i < dtoList.size(); i++) {
 				dtoList.get(i).setLocation(locationDtoList.get(i).getPosition());
+				dtoList.get(i).setCurrentState(deviceStatusDao.queryByDevId(dtoList.get(i).getId()).getCurrentState());
 			}
 //      locationDtoList.forEach(System.out::println);
 //			dtoList.forEach(System.out::println);
@@ -129,6 +208,7 @@ public class DeviceServiceImpl implements DeviceService {
 		device.setCreateTime(new Date());
 		deviceDao.insert(device);
 		Room room = roomDao.queryByBuildingNum(dto.getRoomNum());
+		// 搜索位置是否存在，存在不需要再添加，直接使用ID
 		Location location = new Location();
 		Location resultLocation = locationDao.queryByRoomIdPosition(room.getId(),dto.getLocation());
 		if ( resultLocation != null ) {
@@ -146,6 +226,7 @@ public class DeviceServiceImpl implements DeviceService {
 			deviceStatus.setLocaId(location.getId());
 		}
 		deviceStatus.setGwId(1);
+		deviceStatus.setCurrentState(0);
 		deviceStatusDao.insert(deviceStatus);
 		return null;
 	}

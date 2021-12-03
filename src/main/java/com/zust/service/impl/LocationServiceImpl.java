@@ -30,7 +30,7 @@ public class LocationServiceImpl implements LocationService {
 	 */
 	@Override
 	public List<LocationDto> getLocationByDevIdList(List<Integer> l) {
-    System.out.println("执行queryByDevIdList");
+//    System.out.println("执行queryByDevIdList");
 		List<LocationDto> m =locationDao.queryByDevIdList(l);
     System.out.println(m);
 		return null;

@@ -19,6 +19,38 @@
         <result property="infraredFunc" column="Infrared_func" jdbcType="OTHER"/>
     </resultMap>
 
+    <resultMap id="DtoResultMap" type="com.zust.dto.DeviceDto">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="deviceId" column="device_id" jdbcType="VARCHAR"/>
+        <result property="usageDesc" column="usage_desc" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="roomNum" column="name" jdbcType="VARCHAR"/>
+        <result property="location" column="position" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="queryByOptions" resultMap="DtoResultMap">
+        SELECT device.id,device.device_id,device.create_time,device.usage_desc,location.position,room.name
+        FROM device,device_status,location,room
+        WHERE usage_desc LIKE "%${usageDesc}%" AND device.device_id LIKE "%${deviceId}%" AND room.name LIKE "%${roomNum}%"
+          AND device.id = device_status.dev_id AND device_status.loca_id = location.id AND location.room_id = room.id
+    </select>
+
+    <!--根据选择项筛选设备-->
+<!--    <select id="queryByOptions" resultMap="BaseResultMap">
+        select
+            id, device_id, usage_desc, rated_voltage, rated_current, rated_power, create_time, voltage_monitor, current_monitor, power_monitor, remote_control, elec_consum, Infrared_func
+        from device
+        <where>
+            <if test="usageDesc != null and usageDesc != ''">
+                and usage_desc = #{usageDesc}
+            </if>
+            <if test="deviceId != null and deviceId != ''">
+                and device_id = #{deviceId}
+            </if>
+        </where>
+    </select>-->
+
+    <!--查询所有设备-->
     <select id="queryAllDevice" resultMap="BaseResultMap">
         select
             id, device_id, usage_desc, rated_voltage, rated_current, rated_power, create_time, voltage_monitor, current_monitor, power_monitor, remote_control, elec_consum, Infrared_func
