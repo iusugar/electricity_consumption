@@ -12,6 +12,13 @@
         <result property="gwId" column="gw_id" jdbcType="INTEGER"/>
     </resultMap>
 
+    <select id="queryHaveUsageHistory" resultMap="BaseResultMap">
+        select
+            id, dev_id, last_use_time, current_state, loca_id, gw_id
+        from device_status
+        where last_use_time is not null
+    </select>
+
     <select id="queryByDevId" resultMap="BaseResultMap">
         select
           id, dev_id, last_use_time, current_state, loca_id, gw_id

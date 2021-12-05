@@ -13,7 +13,63 @@
         <result property="consumption" column="consumption" jdbcType="OTHER"/>
     </resultMap>
 
-    <!--通过日期查询一个集合-->
+    <!--根据插座Id计算昨日用电量-->
+    <select id="yesterdayConsumptionById" resultType="Object">
+        SELECT
+       (SELECT consumption
+        FROM electricity_data
+        WHERE DATE(create_time) = DATE_SUB(CURRENT_DATE(),interval 1 day) AND dev_id = #{devId}
+        ORDER BY id DESC
+        LIMIT 1) -
+        (SELECT consumption
+        FROM electricity_data
+        WHERE DATE(create_time) = DATE_SUB(CURRENT_DATE(),interval 1 day) AND dev_id = #{devId}
+        LIMIT 1)
+    </select>
+    
+    <!--根据插座Id计算今日电量-->
+    <select id="todayConsumptionById" resultType="Object">
+        SELECT
+        (SELECT consumption
+        FROM electricity_data
+        WHERE DATE(create_time) = CURRENT_DATE AND dev_id = #{devId}
+        ORDER BY id DESC
+        LIMIT 1) -
+        (SELECT consumption
+        FROM electricity_data
+        WHERE DATE(create_time) = CURRENT_DATE AND dev_id = #{devId}
+        LIMIT 1)
+    </select>
+
+    <!--根据插座Id计算上月电量-->
+    <select id="lastMonthConsumptionByDevId" resultType="Object">
+        SELECT
+        (select consumption
+         FROM electricity_data
+         WHERE dev_id = #{devId} AND MONTH(create_time) = MONTH(DATE_ADD(CURRENT_DATE,interval -1 MONTH))
+            AND YEAR(DATE_ADD(create_time,interval -1 MONTH)) = YEAR(CURRENT_DATE)
+         ORDER BY id DESC LIMIT 1) -
+        (select consumption
+         FROM electricity_data
+         WHERE dev_id = #{devId} AND MONTH(create_time) = MONTH(DATE_ADD(CURRENT_DATE,interval -1 MONTH))
+         AND YEAR(DATE_ADD(create_time,interval -1 MONTH)) = YEAR(CURRENT_DATE)
+         LIMIT 1)
+    </select>
+
+    <!--根据插座Id计算本月电量-->
+    <select id="currentMonthConsumptionByDevId" resultType="Object">
+        SELECT
+        (SELECT consumption
+         FROM electricity_data
+         WHERE dev_id = #{deviceId} AND MONTH(create_time) = MONTH(CURRENT_DATE) AND YEAR(create_time) = YEAR(CURRENT_DATE())
+         ORDER BY id DESC LIMIT 1) -
+        (SELECT consumption
+         FROM electricity_data
+         WHERE dev_id = #{deviceId} AND MONTH(create_time) = MONTH(CURRENT_DATE()) AND YEAR(create_time) = YEAR(CURRENT_DATE())
+         LIMIT 1)
+    </select>
+
+    <!--通过日期查询数据列表 24小时 24个时间点-->
     <select id="queryByDate" resultMap="BaseResultMap">
         SELECT *,HOUR(electricity_data.create_time) FROM electricity_data
         WHERE create_time BETWEEN #{start} AND #{end} AND dev_id = #{devId}
