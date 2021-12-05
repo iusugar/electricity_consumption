@@ -3,9 +3,7 @@ package com.zust.dao;
 import com.zust.entity.ElectricityData;
 import org.apache.ibatis.annotations.Param;
 
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
  * (ElectricityData)表数据库访问层
@@ -16,7 +14,42 @@ import java.util.Map;
 public interface ElectricityDataDao {
 
 	/**
-	 * 通过指定日期查询
+	 * 通过设备主键查询昨日用电量
+	 * @param devId 设备主键
+	 * @return 昨日用电量
+	 */
+	Object yesterdayConsumptionById(Integer devId);
+
+	/**
+	 * 通过设备主键查询今日已用电量
+	 * @param devId 设备主键
+	 * @return 今日用电量
+	 */
+	Object todayConsumptionById(Integer devId);
+
+	/**
+	 * 通过设备主键查询上月已使用电量
+	 * @param devId 设备主键
+	 * @return 上月使用电量
+	 */
+	Object lastMonthConsumptionByDevId(Integer devId);
+
+	/**
+	 * 通过设备主键ID查询当前月份已使用电量
+	 * @param devId 设备主键
+	 * @return 当前月用电量
+	 */
+	Object currentMonthConsumptionByDevId(Integer devId);
+
+	/**
+	 * 通过设备主键ID查询
+	 * @param devId 设备主键
+	 * @return 实例对象
+	 */
+	ElectricityData queryByDevId(Integer devId);
+
+	/**
+	 * 通过指定日期查询 24小时
 	 * @param startTime 开始时间
 	 * @param endTime 结束时间
 	 * @param devId 设备主键ID
