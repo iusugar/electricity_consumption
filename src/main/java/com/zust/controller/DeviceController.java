@@ -68,9 +68,11 @@ public class DeviceController {
 
 	@PutMapping("update")
 	public String updateDevice(@RequestBody(required = false)DeviceDto deviceDto) {
-    System.out.println(deviceDto);
 		return deviceService.updateDevice(deviceDto);
 	}
 
-
+	@DeleteMapping("delete")
+	public String deleteDevice(@RequestBody(required = false) String deviceId) {
+		return deviceService.deleteByDeviceId(deviceId);
+	}
 }

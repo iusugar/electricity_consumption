@@ -34,10 +34,31 @@ public class ElectricityDataController {
       return this.electricityDataService.queryById(id);
   }
 
+	// 返回昨天24小时数据
 	@GetMapping("getYesterdayData")
 	public List<ElectricityData> getYesterdayEachHourData(Integer devId) {
-    System.out.println(devId);
 		return electricityDataService.getAppointDayData(new Date(),devId);
+	}
+
+	// 返回当月用电量
+	@GetMapping("getCurMonthC")
+	public float getCurrentMonthConsumption() {
+		return electricityDataService.getCurrentMonthConsumption();
+	}
+	//返回上月用电量
+	@GetMapping("getLastMonthC")
+	public float getLastMonthConsumption() {
+		return electricityDataService.getLastMonthConsumption();
+	}
+	// 上面两个方法的结合
+	@GetMapping("getMonthC")
+	public String getMonthConsumption() {
+		return electricityDataService.getCurrentMonthConsumption() + "," + electricityDataService.getLastMonthConsumption();
+	}
+	// 返回今日用电量和昨日用电量
+	@GetMapping("getDayC")
+	public String getDayConsumption() {
+		return electricityDataService.getTodayConsumption() + "," + electricityDataService.getYesterdayConsumption();
 	}
 
 }
