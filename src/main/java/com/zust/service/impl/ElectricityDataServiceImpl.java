@@ -1,5 +1,7 @@
 package com.zust.service.impl;
 
+import com.zust.dao.DeviceStatusDao;
+import com.zust.entity.DeviceStatus;
 import com.zust.entity.ElectricityData;
 import com.zust.dao.ElectricityDataDao;
 import com.zust.service.ElectricityDataService;
@@ -21,9 +23,96 @@ import java.util.List;
 public class ElectricityDataServiceImpl implements ElectricityDataService {
     @Resource
     private ElectricityDataDao electricityDataDao;
+		@Resource
+		private DeviceStatusDao deviceStatusDao;
+
 
 	/**
-	 * 通过日期和设备主键ID查询昨日用电数据
+	 * 获取昨日用电量
+	 *
+	 * @return 用电量
+	 */
+	@Override
+	public float getYesterdayConsumption() {
+		float total = 0;
+		List<DeviceStatus> statusList = deviceStatusDao.queryHaveUsageHistory();
+		if (statusList == null) {
+			return 0;
+		}
+		for (DeviceStatus ds : statusList) {
+			Object o = electricityDataDao.yesterdayConsumptionById(ds.getDevId());
+			if (o != null) {
+				total += Float.parseFloat(o.toString());
+			}
+		}
+		return total;
+	}
+
+	/**
+	 * 获取今日用电量
+	 *
+	 * @return 用电量
+	 */
+	@Override
+	public float getTodayConsumption() {
+		float total = 0;
+		List<DeviceStatus> statusList = deviceStatusDao.queryHaveUsageHistory();
+		if (statusList == null) {
+			return 0;
+		}
+		for (DeviceStatus ds : statusList) {
+			Object o = electricityDataDao.todayConsumptionById(ds.getDevId());
+			if (o != null) {
+				total += Float.parseFloat(o.toString());
+			}
+		}
+		return total;
+	}
+
+	/**
+	 * 获取上个月用电量
+	 *
+	 * @return 用电量
+	 */
+	@Override
+	public float getLastMonthConsumption() {
+		float total = 0;
+		List<DeviceStatus> statusList = deviceStatusDao.queryHaveUsageHistory();
+		if (statusList == null) {
+			return 0;
+		}
+		for (DeviceStatus ds : statusList) {
+			Object o = electricityDataDao.lastMonthConsumptionByDevId(ds.getDevId());
+			if (o != null) {
+				total += Float.parseFloat(o.toString());
+			}
+		}
+		return total;
+	}
+
+	/**
+	 * 获取当前月份用电量
+	 *
+	 * @return 用电量
+	 */
+	@Override
+	public float getCurrentMonthConsumption() {
+		float total = 0;
+		List<DeviceStatus> statusList = deviceStatusDao.queryHaveUsageHistory();
+		if (statusList == null) {
+			return 0;
+		}
+    for (DeviceStatus ds : statusList) {
+			Object o = electricityDataDao.currentMonthConsumptionByDevId(ds.getDevId());
+			if (o != null) {
+				total += Float.parseFloat(o.toString());
+			}
+    }
+		return total;
+	}
+
+	/**
+	 * 通过日期和设备主键ID查询昨日24时用电数据
 	 *
 	 * @param date  日期
 	 * @param devId 设备主键ID

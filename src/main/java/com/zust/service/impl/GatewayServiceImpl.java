@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * (Gateway)表服务实现类
  *
- * @author makejava
+ * @author iusugar
  * @since 2021-11-18 16:01:42
  */
 @Service("gatewayService")

@@ -12,6 +12,12 @@ import java.util.List;
 public interface DeviceStatusService {
 
 	/**
+	 * 查找有使用记录的插座
+	 * @return 对象列表
+	 */
+	List<DeviceStatus> getHaveUsageHistory();
+
+	/**
 	 * 通过设备主键ID查询单条数据
 	 * @param devId 设备主键ID
 	 * @return 实例对象

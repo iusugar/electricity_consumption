@@ -11,13 +11,23 @@ import java.util.List;
 /**
  * (DeviceStatus)表服务实现类
  *
- * @author makejava
+ * @author iusugar
  * @since 2021-11-26 14:15:13
  */
 @Service("deviceStatusService")
 public class DeviceStatusServiceImpl implements DeviceStatusService {
   @Resource
   private DeviceStatusDao deviceStatusDao;
+
+	/**
+	 * 查找有使用记录的插座
+	 *
+	 * @return 对象列表
+	 */
+	@Override
+	public List<DeviceStatus> getHaveUsageHistory() {
+		return deviceStatusDao.queryHaveUsageHistory();
+	}
 
 	/**
 	 * 通过设备主键ID查询单条数据

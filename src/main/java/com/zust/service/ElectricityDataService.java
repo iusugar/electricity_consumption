@@ -16,7 +16,31 @@ import java.util.Map;
 public interface ElectricityDataService {
 
 	/**
-	 * 通过日期和设备主键ID查询昨日用电数据
+	 * 获取昨日用电量
+	 * @return 用电量
+	 */
+	float getYesterdayConsumption();
+
+	/**
+	 * 获取今日用电量
+	 * @return 用电量
+	 */
+	float getTodayConsumption();
+
+	/**
+	 * 获取上个月用电量
+	 * @return 用电量
+	 */
+	float getLastMonthConsumption();
+
+	/**
+	 * 获取当前月份用电量
+	 * @return 用电量
+	 */
+	float getCurrentMonthConsumption();
+
+	/**
+	 * 通过日期和设备主键ID查询昨日24时用电数据
 	 * @param date 日期
 	 * @param devId 设备主键ID
 	 * @return 实例对象集合

@@ -54,8 +54,12 @@ public class DeviceServiceImpl implements DeviceService {
 	 */
 	@Override
 	public String deleteByDeviceId(String deviceId) {
-		deviceDao.queryByDevId(deviceId);
-		return null;
+		Device d = deviceDao.queryByDevId(deviceId);
+    deviceDao.deleteById(d.getId());
+		if (deviceDao.queryById(d.getId()) == null) {
+      return "success";
+		}
+		return "failed";
 	}
 
 	/**
@@ -113,6 +117,7 @@ public class DeviceServiceImpl implements DeviceService {
 			deviceDtoList.forEach(dto -> {
 				dto.setBuildNum(dto.getRoomNum().substring(0,dto.getRoomNum().indexOf("-")));
 				String num = dto.getRoomNum().substring(dto.getRoomNum().indexOf("-") + 1);
+				dto.setCurrentState(deviceStatusDao.queryByDevId(dto.getId()).getCurrentState());
 				dto.setRoomNum(num);
 			});
 		}
@@ -141,6 +146,7 @@ public class DeviceServiceImpl implements DeviceService {
 				deviceDto.setBuildNum(buildNum);
 				deviceDto.setRoomNum(roomNum);
 				deviceDto.setLocation(roomDtoList.get(i).getPosition());
+				deviceDto.setCurrentState(deviceStatusDao.queryByDevId(deviceDto.getId()).getCurrentState());
 				dtoList.add(deviceDto);
 			}
 		}

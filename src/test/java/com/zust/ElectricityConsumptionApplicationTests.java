@@ -60,7 +60,18 @@ class ElectricityConsumptionApplicationTests {
 
 	@Test
 	void getStatus() {
-		DeviceStatus ds = dsDao.queryByDevId(65);
-    System.out.println(ds.getCurrentState());
+		List<DeviceStatus> statusList = dsDao.queryHaveUsageHistory();
+    statusList.forEach(System.out::println);
+	}
+
+	@Test
+	void getMonthConsumption() {
+    System.out.println(ed.lastMonthConsumptionByDevId(63));
+	}
+
+	@Test
+	void getDayConsumption() {
+//    System.out.println(ed.todayConsumptionById(63));
+    System.out.println(ed.yesterdayConsumptionById(63));
 	}
 }
