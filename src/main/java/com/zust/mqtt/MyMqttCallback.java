@@ -73,7 +73,7 @@ public class MyMqttCallback implements MqttCallbackExtended {
       public void run() {
         saveDataFlag = 1;
       }
-    },0,2 * 60 * 1000);
+    },0,5 * 60 * 1000);
   }
 
   @SneakyThrows
@@ -99,7 +99,7 @@ public class MyMqttCallback implements MqttCallbackExtended {
         break;
       }
       case TOPIC_2: {
-				handleStateMessage(mqttMessage);
+//				handleStateMessage(mqttMessage);
 				break;
       }
     }
@@ -118,15 +118,17 @@ public class MyMqttCallback implements MqttCallbackExtended {
     Map<String,String> result = mapper.readValue(message.toString(), new TypeReference<Map<String,String>>(){});
     Device device = myMqttCallback.deviceService.queryByDeviceId(result.get("deviceID"));
     ElectricityData ed = new ElectricityData();
-    ed.setDevId(device.getId());
-    ed.setCreateTime(new Date());
-    ed.setInsVoltage(result.get("U"));
-    ed.setInsCurrent(result.get("I"));
-    ed.setInsPower(result.get("P"));
-		ed.setConsumption(result.get("Ph"));
-    myMqttCallback.electricityDataService.insert(ed);
-    saveDataFlag = 0;
-    System.out.println(result);
+		if (device != null) {
+			ed.setDevId(device.getId());
+			ed.setCreateTime(new Date());
+			ed.setInsVoltage(result.get("U"));
+			ed.setInsCurrent(result.get("I"));
+			ed.setInsPower(result.get("P"));
+			ed.setConsumption(result.get("Ph"));
+			myMqttCallback.electricityDataService.insert(ed);
+			saveDataFlag = 0;
+		}
+//    System.out.println(result);
   }
 
 	public void handleStateMessage(MqttMessage stateMsg) throws JsonProcessingException {
