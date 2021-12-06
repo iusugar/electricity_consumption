@@ -60,5 +60,14 @@ public class ElectricityDataController {
 	public String getDayConsumption() {
 		return electricityDataService.getTodayConsumption() + "," + electricityDataService.getYesterdayConsumption();
 	}
-
+	// 返回一年12个月的用电量
+	@GetMapping("getYearC")
+	public float[] getYearConsumption() {
+		return electricityDataService.getLastYearMonthConsumption();
+	}
+	// 返回指定日期一天的功率变化(24小时)
+	@GetMapping("getDayTotalPower")
+	public float[] getAppointedDayTotalPower() {
+		return electricityDataService.getAppointDayTotalPower(new Date());
+	}
 }

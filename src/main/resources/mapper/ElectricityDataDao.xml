@@ -13,7 +13,26 @@
         <result property="consumption" column="consumption" jdbcType="OTHER"/>
     </resultMap>
 
-    <!--根据插座Id计算昨日用电量-->
+    <!--根据插座主键Id查询每个月最后一条用电记录按照月份排序-->
+    <select id="lastYearMonthLastConsumptionById" resultMap="BaseResultMap">
+        SELECT *
+        FROM electricity_data
+        WHERE dev_id = #{devId} AND YEAR(create_time) = YEAR(CURRENT_DATE) AND create_time IN
+            (SELECT MAX(create_time)
+        FROM electricity_data
+        WHERE dev_id = #{devId}
+        GROUP BY MONTH(create_time))
+    </select>
+
+    <!--根据插座主键Id查询每个月第一条用电记录按照月份排序-->
+    <select id="lastYearMonthFirstConsumptionById" resultMap="BaseResultMap">
+        SELECT id, dev_id, create_time, ins_voltage, ins_current, ins_power, consumption
+        FROM electricity_data
+        WHERE dev_id = #{devId} AND YEAR(create_time) = YEAR(DATE_SUB(CURRENT_DATE,INTERVAL 0 year))
+        GROUP BY MONTH(create_time)
+    </select>
+
+    <!--根据插座主键Id计算昨日用电量-->
     <select id="yesterdayConsumptionById" resultType="Object">
         SELECT
        (SELECT consumption
@@ -71,7 +90,7 @@
 
     <!--通过日期查询数据列表 24小时 24个时间点-->
     <select id="queryByDate" resultMap="BaseResultMap">
-        SELECT *,HOUR(electricity_data.create_time) FROM electricity_data
+        SELECT id, dev_id, create_time, ins_voltage, ins_current, ins_power, consumption,HOUR(electricity_data.create_time) FROM electricity_data
         WHERE create_time BETWEEN #{start} AND #{end} AND dev_id = #{devId}
         GROUP BY HOUR(electricity_data.create_time)
     </select>

@@ -3,9 +3,11 @@ package com.zust;
 import com.zust.dao.*;
 import com.zust.dto.DeviceDto;
 import com.zust.dto.RoomDto;
+import com.zust.dto.StatusDto;
 import com.zust.entity.Device;
 import com.zust.entity.DeviceStatus;
 import com.zust.entity.ElectricityData;
+import com.zust.service.ElectricityDataService;
 import com.zust.service.LocationService;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,6 +27,9 @@ class ElectricityConsumptionApplicationTests {
 	RoomDao roomDao;
 	@Resource
 	DeviceStatusDao dsDao;
+	@Resource
+	ElectricityDataService eds;
+
 
   @Test
   void contextLoads() {
@@ -73,5 +78,27 @@ class ElectricityConsumptionApplicationTests {
 	void getDayConsumption() {
 //    System.out.println(ed.todayConsumptionById(63));
     System.out.println(ed.yesterdayConsumptionById(63));
+	}
+
+	@Test
+	void getYearConsumption() {
+		List<ElectricityData> list1 = ed.lastYearMonthFirstConsumptionById(63);
+    list1.forEach(System.out::println);
+	}
+
+	@Test
+	void testGetYearConsumption() {
+		eds.getLastYearMonthConsumption();
+	}
+
+	@Test
+	void testYesterdayPower() {
+		eds.getAppointDayTotalPower(new Date());
+	}
+
+	@Test
+	void testLastUseTime() {
+		List<StatusDto> l = dsDao.queryLastUseTime();
+    l.forEach(System.out::println);
 	}
 }

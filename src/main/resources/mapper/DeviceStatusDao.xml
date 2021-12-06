@@ -11,7 +11,24 @@
         <result property="locaId" column="loca_id" jdbcType="INTEGER"/>
         <result property="gwId" column="gw_id" jdbcType="INTEGER"/>
     </resultMap>
+    <resultMap id="DtoResultMap" type="com.zust.dto.StatusDto">
+        <result property="lastUseTime" column="last_use_time" jdbcType="TIMESTAMP"/>
+        <result property="deviceId" column="device_id" jdbcType="VARCHAR"/>
+        <result property="roomNum" column="room_name" jdbcType="VARCHAR"/>
+        <result property="location" column="position" jdbcType="VARCHAR"/>
+    </resultMap>
 
+    <select id="queryLastUseTime" resultMap="DtoResultMap">
+        SELECT
+               device.id,device_id,last_use_time,room.name AS room_name,position
+        FROM device,device_status,location,room
+        WHERE device_status.last_use_time IS NOT NULL
+          AND device.id = device_status.dev_id AND device_status.loca_id = location.id AND room.id = location.room_id
+        ORDER BY last_use_time
+            LIMIT 6
+    </select>
+
+    <!--查找有使用记录的状态数据-->
     <select id="queryHaveUsageHistory" resultMap="BaseResultMap">
         select
             id, dev_id, last_use_time, current_state, loca_id, gw_id

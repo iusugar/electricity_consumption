@@ -16,55 +16,27 @@ import java.util.List;
 public class DeviceDto {
 
 	private Integer id;
-
-  /**
-  * 设备ID
-  */
   private String deviceId;
-  /**
-  * 用途，用来说明负载
-  */
   private String usageDesc;
-
-	/**
-	 * 空间位置
-	 */
+	// 增加位置属性
   private String buildNum;
   private String roomNum;
   private String location;
-
-	/**
-	 * 当前状态
-	 */
+	// 增加状态属性
 	private Object currentState;
 
-  /**
-  * 额定电压
-  */
   private float ratedVoltage;
-  /**
-  * 额定电流
-  */
   private float ratedCurrent;
-  /**
-  * 额定功率
-  */
   private float ratedPower;
-
 	private Date createTime;
 
   private List<String> checkedFunctions;
 
 	private int voltageMonitor;
-
 	private int currentMonitor;
-
 	private int powerMonitor;
-
 	private int remoteControl;
-
 	private int elecConsum;
-
 	private int infraredFunc;
 
 }

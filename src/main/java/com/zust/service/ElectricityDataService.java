@@ -16,6 +16,20 @@ import java.util.Map;
 public interface ElectricityDataService {
 
 	/**
+	 * 获取指定日期一天总用电功率(24小时)
+	 * @param date 指定日期
+	 * @return 24小时的用电功率
+	 */
+	float[] getAppointDayTotalPower(Date date);
+
+	/**
+	 * 获取去年每个月的用电量
+	 * @return 12个月的用电数据
+	 */
+	float[] getLastYearMonthConsumption();
+
+
+	/**
 	 * 获取昨日用电量
 	 * @return 用电量
 	 */

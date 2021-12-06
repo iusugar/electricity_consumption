@@ -1,5 +1,6 @@
 package com.zust.service.impl;
 
+import com.zust.dto.StatusDto;
 import com.zust.entity.DeviceStatus;
 import com.zust.dao.DeviceStatusDao;
 import com.zust.service.DeviceStatusService;
@@ -18,6 +19,17 @@ import java.util.List;
 public class DeviceStatusServiceImpl implements DeviceStatusService {
   @Resource
   private DeviceStatusDao deviceStatusDao;
+
+	/**
+	 * 查找6个最长时间未使用的插座
+	 *
+	 * @return 设备状态传输对象列表
+	 */
+	@Override
+	public List<StatusDto> getLastUseTime() {
+		List<StatusDto> statusList = deviceStatusDao.queryLastUseTime();
+		return statusList;
+	}
 
 	/**
 	 * 查找有使用记录的插座

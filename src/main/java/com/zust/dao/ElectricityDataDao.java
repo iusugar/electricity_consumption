@@ -14,6 +14,20 @@ import java.util.List;
 public interface ElectricityDataDao {
 
 	/**
+	 * 通过设备主键查询去年每月最后一条用电数据
+	 * @param devId 设备主键
+	 * @return 单个设备的每月用电数据列表
+	 */
+	List<ElectricityData> lastYearMonthLastConsumptionById(Integer devId);
+
+	/**
+	 * 通过设备主键查询去年每月第一条用电数据
+	 * @param devId 设备主键
+	 * @return 单个设备的每月用电数据列表
+	 */
+	List<ElectricityData> lastYearMonthFirstConsumptionById(Integer devId);
+
+	/**
 	 * 通过设备主键查询昨日用电量
 	 * @param devId 设备主键
 	 * @return 昨日用电量

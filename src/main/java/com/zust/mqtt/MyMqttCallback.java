@@ -99,7 +99,7 @@ public class MyMqttCallback implements MqttCallbackExtended {
         break;
       }
       case TOPIC_2: {
-//				handleStateMessage(mqttMessage);
+				handleStateMessage(mqttMessage);
 				break;
       }
     }

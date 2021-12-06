@@ -11,13 +11,9 @@ import lombok.Data;
 public class LocationDto {
 // 实体属性
 	private Integer id;
-
 	private Integer roomId;
-
 	private String position;
-
 	private String description;
-
 // 增加属性
 	/*房间名*/
 	private String roomName;

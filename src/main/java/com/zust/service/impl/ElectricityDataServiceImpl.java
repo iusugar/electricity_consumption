@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -26,6 +27,78 @@ public class ElectricityDataServiceImpl implements ElectricityDataService {
 		@Resource
 		private DeviceStatusDao deviceStatusDao;
 
+
+	/**
+	 * 获取指定日期一天总用电功率(24小时)
+	 *
+	 * @return 24小时的用电功率
+	 */
+	@Override
+	public float[] getAppointDayTotalPower(Date date) {
+		float[] totalPower = new float[24];
+		List<DeviceStatus> statusList = deviceStatusDao.queryHaveUsageHistory();
+		if (statusList == null || statusList.size() < 1) {
+			return null;
+		}
+		String start = new SimpleDateFormat("yyyy-MM-dd 00:00:00").format(date);
+		String end = new SimpleDateFormat("yyyy-MM-dd 23:59:59").format(date);
+		List<ElectricityData> eList = new ArrayList<>();
+    for (DeviceStatus status : statusList) {
+	    eList = electricityDataDao.queryByDate(start,end,status.getDevId());
+      if (eList == null || eList.size() < 1) {
+				continue;
+      }
+			for (int i = 0,j = 0; i < 24 && j < eList.size(); i++) {
+				int hour = Integer.parseInt(new SimpleDateFormat("HH").format(eList.get(j).getCreateTime()));
+				if (hour == i+1) {
+					totalPower[i] += Float.parseFloat(eList.get(j).getInsPower().toString());
+					j++;
+				}
+			}
+    }
+		return totalPower;
+	}
+
+	/**
+	 * 获取去年每个月的用电量
+	 *
+	 * @return 12个月的用电数据
+	 */
+	@Override
+	public float[] getLastYearMonthConsumption() {
+		float[] monthConsumption = new float[12];
+		SimpleDateFormat dateFormat = new SimpleDateFormat("MM");
+		List<DeviceStatus> statusList = deviceStatusDao.queryHaveUsageHistory();
+		if (statusList == null || statusList.size() < 1) {
+			return null;
+		}
+    for (DeviceStatus deviceStatus : statusList) {
+	    List<ElectricityData> firstDataList = electricityDataDao.lastYearMonthFirstConsumptionById(deviceStatus.getDevId());
+			List<ElectricityData> lastDataList = electricityDataDao.lastYearMonthLastConsumptionById(deviceStatus.getDevId());
+			if (firstDataList == null || firstDataList.size() < 1) {
+				continue;
+			}
+      System.out.println(firstDataList);
+	    float[] firstConsumption = new float[12];
+	    float[] LastConsumption = new float[12];
+			for (ElectricityData ed : firstDataList) {
+				int index = Integer.parseInt(dateFormat.format(ed.getCreateTime())) - 1;
+				firstConsumption[index] = Float.parseFloat(ed.getConsumption().toString());
+			}
+      for (ElectricityData ed : lastDataList) {
+	      int index = Integer.parseInt(dateFormat.format(ed.getCreateTime())) - 1;
+	      LastConsumption[index] = Float.parseFloat(ed.getConsumption().toString());
+      }
+      for (int i = 0; i< 12; i++) {
+	      monthConsumption[i] += LastConsumption[i] - firstConsumption[i];
+      }
+    }
+		for (float v : monthConsumption) {
+			System.out.println(v);
+		}
+
+		return monthConsumption;
+	}
 
 	/**
 	 * 获取昨日用电量
@@ -126,8 +199,7 @@ public class ElectricityDataServiceImpl implements ElectricityDataService {
 		Date yesterday = c.getTime();
 		String start = new SimpleDateFormat("yyyy-MM-dd 00:00:00").format(yesterday);
 		String end = new SimpleDateFormat("yyyy-MM-dd 23:59:59").format(yesterday);
-		List<ElectricityData> l = electricityDataDao.queryByDate(start,end,devId);
-		return l;
+		return electricityDataDao.queryByDate(start,end,devId);
 	}
 
 	/**

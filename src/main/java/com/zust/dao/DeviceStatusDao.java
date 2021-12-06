@@ -1,5 +1,6 @@
 package com.zust.dao;
 
+import com.zust.dto.StatusDto;
 import com.zust.entity.DeviceStatus;
 import org.apache.ibatis.annotations.Param;
 import java.util.List;
@@ -11,6 +12,12 @@ import java.util.List;
  * @since 2021-11-26 14:15:13
  */
 public interface DeviceStatusDao {
+
+	/**
+	 * 查找6个最长时间未使用的插座
+	 * @return 设备状态传输对象列表
+	 */
+	List<StatusDto> queryLastUseTime();
 
 	/**
 	 * 查找有使用记录的插座
