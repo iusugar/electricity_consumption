@@ -8,6 +8,7 @@ import com.zust.entity.Device;
 import com.zust.entity.DeviceStatus;
 import com.zust.entity.ElectricityData;
 import com.zust.service.ElectricityDataService;
+import com.zust.service.HistoricalStatusService;
 import com.zust.service.LocationService;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,6 +30,10 @@ class ElectricityConsumptionApplicationTests {
 	DeviceStatusDao dsDao;
 	@Resource
 	ElectricityDataService eds;
+	@Resource
+	HistoricalStatusDao hsd;
+	@Resource
+	HistoricalStatusService hsService;
 
 
   @Test
@@ -100,5 +105,10 @@ class ElectricityConsumptionApplicationTests {
 	void testLastUseTime() {
 		List<StatusDto> l = dsDao.queryLastUseTime();
     l.forEach(System.out::println);
+	}
+	@Test
+	void testGetWeekOnline() {
+//    System.out.println(hsd.queryWeekEachHourOnlineNumber(1,14,0));
+		hsService.getWeekEachHourOnlineNumber();
 	}
 }

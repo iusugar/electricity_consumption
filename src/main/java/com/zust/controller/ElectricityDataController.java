@@ -5,6 +5,7 @@ import com.zust.service.ElectricityDataService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -68,6 +69,10 @@ public class ElectricityDataController {
 	// 返回指定日期一天的功率变化(24小时)
 	@GetMapping("getDayTotalPower")
 	public float[] getAppointedDayTotalPower() {
-		return electricityDataService.getAppointDayTotalPower(new Date());
+		Calendar c = Calendar.getInstance();
+		c.setTime(new Date());
+		c.add(Calendar.DAY_OF_MONTH, -1);
+		Date yesterday = c.getTime();
+		return electricityDataService.getAppointDayTotalPower(yesterday);
 	}
 }

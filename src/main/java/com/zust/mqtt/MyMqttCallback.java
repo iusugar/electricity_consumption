@@ -4,12 +4,15 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zust.dao.DeviceStatusDao;
+import com.zust.dao.HistoricalStatusDao;
 import com.zust.entity.Device;
 import com.zust.entity.DeviceStatus;
 import com.zust.entity.ElectricityData;
+import com.zust.entity.HistoricalStatus;
 import com.zust.service.DeviceService;
 import com.zust.service.DeviceStatusService;
 import com.zust.service.ElectricityDataService;
+import com.zust.service.HistoricalStatusService;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.paho.client.mqttv3.*;
@@ -18,6 +21,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.nio.channels.NonWritableChannelException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -44,6 +48,8 @@ public class MyMqttCallback implements MqttCallbackExtended {
   private DeviceService deviceService;
 	@Resource
 	private DeviceStatusService statusService;
+	@Resource
+	private HistoricalStatusService historicalStatusService;
 
   private static MyMqttCallback myMqttCallback;
 
@@ -140,19 +146,50 @@ public class MyMqttCallback implements MqttCallbackExtended {
 		while (matcher.find()) {
 			stateList.add(matcher.group());
 		}
-
 		ObjectMapper mapper = new ObjectMapper();
     for (String state : stateList) {
 	    Map<String,String> result = mapper.readValue(state, new TypeReference<Map<String, String>>(){});
 			Device device = null;
 			if (result != null) {
 				device = myMqttCallback.deviceService.queryByDeviceId(result.get("id"));
+			} else {
+				continue;
 			}
 			if (device != null) {
 				DeviceStatus deviceStatus = myMqttCallback.statusService.queryByDevId(device.getId());
-				deviceStatus.setLastUseTime(new Date());
-				deviceStatus.setCurrentState(result.get("status"));
-				myMqttCallback.statusService.update(deviceStatus);
+				boolean newStatus = Integer.parseInt(result.get("status")) != 0;
+        if (newStatus == (Boolean) deviceStatus.getCurrentState()) {
+          log.info("状态未变 不更新");
+        }else {
+	        deviceStatus.setLastUseTime(new Date());
+	        deviceStatus.setCurrentState(result.get("status"));
+	        myMqttCallback.statusService.update(deviceStatus);
+        }
+				HistoricalStatus hs = myMqttCallback.historicalStatusService.getByDevId(device.getId());
+				if (hs != null) {
+					SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+          String hsDate = dateFormat.format(hs.getCreateTime());
+					String today = dateFormat.format(new Date());
+					// 最新的一条数据不是今天
+//					if (!hsDate.equals(today)) {
+//						// 直接添加
+//            System.out.println(true);
+//					} else if ((Boolean) newStatus == hs.getStatus()){
+//            System.out.println(false);
+//					}
+					if (!hsDate.equals(today) || newStatus != (Boolean) hs.getStatus()) {
+						hs.setCreateTime(new Date());
+						hs.setStatus(result.get("status"));
+						hs.setDevId(device.getId());
+						myMqttCallback.historicalStatusService.insert(hs);
+					}
+				} else {
+					HistoricalStatus newHs = new HistoricalStatus();
+					newHs.setCreateTime(new Date());
+					newHs.setStatus(result.get("status"));
+					newHs.setDevId(device.getId());
+					myMqttCallback.historicalStatusService.insert(newHs);
+				}
 			}
     }
 	}

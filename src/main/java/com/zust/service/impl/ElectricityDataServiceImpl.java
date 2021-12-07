@@ -78,7 +78,6 @@ public class ElectricityDataServiceImpl implements ElectricityDataService {
 			if (firstDataList == null || firstDataList.size() < 1) {
 				continue;
 			}
-      System.out.println(firstDataList);
 	    float[] firstConsumption = new float[12];
 	    float[] LastConsumption = new float[12];
 			for (ElectricityData ed : firstDataList) {
@@ -93,9 +92,9 @@ public class ElectricityDataServiceImpl implements ElectricityDataService {
 	      monthConsumption[i] += LastConsumption[i] - firstConsumption[i];
       }
     }
-		for (float v : monthConsumption) {
-			System.out.println(v);
-		}
+//		for (float v : monthConsumption) {
+//			System.out.println(v);
+//		}
 
 		return monthConsumption;
 	}
