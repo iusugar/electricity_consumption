@@ -218,7 +218,7 @@ public class DeviceServiceImpl implements DeviceService {
 		Location location = new Location();
 		Location resultLocation = locationDao.queryByRoomIdPosition(room.getId(),dto.getLocation());
 		if ( resultLocation != null ) {
-			System.out.println("已存在");
+			System.out.println("位置已存在");
 		} else {
 			location.setRoomId(room.getId());
 			location.setPosition(dto.getLocation());

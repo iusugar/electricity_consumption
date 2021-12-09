@@ -90,11 +90,12 @@ public class ElectricityDataServiceImpl implements ElectricityDataService {
       }
       for (int i = 0; i< 12; i++) {
 	      monthConsumption[i] += LastConsumption[i] - firstConsumption[i];
+				monthConsumption[i] = (float) (Math.round(monthConsumption[i] * 100.0) /100.0);
       }
     }
-//		for (float v : monthConsumption) {
-//			System.out.println(v);
-//		}
+		for (float v : monthConsumption) {
+			System.out.println(v);
+		}
 
 		return monthConsumption;
 	}

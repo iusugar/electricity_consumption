@@ -24,6 +24,16 @@ public class LocationServiceImpl implements LocationService {
 	private LocationDao locationDao;
 
 	/**
+	 * 查询所有数据
+	 *
+	 * @return 所有数据列表
+	 */
+	@Override
+	public List<Location> getAllLocation() {
+		return null;
+	}
+
+	/**
 	 * 通过设备ID主键查找具体位置
 	 * @param l 设备主键ID列表
 	 * @return 带设备ID的位置列表

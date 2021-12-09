@@ -158,9 +158,7 @@ public class MyMqttCallback implements MqttCallbackExtended {
 			if (device != null) {
 				DeviceStatus deviceStatus = myMqttCallback.statusService.queryByDevId(device.getId());
 				boolean newStatus = Integer.parseInt(result.get("status")) != 0;
-        if (newStatus == (Boolean) deviceStatus.getCurrentState()) {
-          log.info("状态未变 不更新");
-        }else {
+        if (newStatus != (Boolean) deviceStatus.getCurrentState()) {
 	        deviceStatus.setLastUseTime(new Date());
 	        deviceStatus.setCurrentState(result.get("status"));
 	        myMqttCallback.statusService.update(deviceStatus);

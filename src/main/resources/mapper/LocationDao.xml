@@ -19,6 +19,13 @@
         <result property="roomName" column="name" jdbcType="VARCHAR"/>
     </resultMap>
 
+    <select id="queryAllLocation" resultMap="BaseResultMap">
+        select
+            id, room_id, position, description
+        from electricity_consumption.location
+    </select>
+
+    <!--按照设备主键ID列表查询-->
     <select id="queryByDevIdList" resultMap="DtoResultMap">
         select `location`.*,`device_status`.dev_id
         from `location`,`device_status`

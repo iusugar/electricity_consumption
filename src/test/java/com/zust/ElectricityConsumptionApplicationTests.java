@@ -7,6 +7,7 @@ import com.zust.dto.StatusDto;
 import com.zust.entity.Device;
 import com.zust.entity.DeviceStatus;
 import com.zust.entity.ElectricityData;
+import com.zust.entity.Location;
 import com.zust.service.ElectricityDataService;
 import com.zust.service.HistoricalStatusService;
 import com.zust.service.LocationService;
@@ -34,6 +35,8 @@ class ElectricityConsumptionApplicationTests {
 	HistoricalStatusDao hsd;
 	@Resource
 	HistoricalStatusService hsService;
+	@Resource
+	LocationDao locationDao;
 
 
   @Test
@@ -110,5 +113,10 @@ class ElectricityConsumptionApplicationTests {
 	void testGetWeekOnline() {
 //    System.out.println(hsd.queryWeekEachHourOnlineNumber(1,14,0));
 		hsService.getWeekEachHourOnlineNumber();
+	}
+	@Test
+	void testGetAllLocation() {
+		List<Location> l = locationDao.queryAllLocation();
+    l.forEach(System.out::println);
 	}
 }

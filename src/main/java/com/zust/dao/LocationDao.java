@@ -14,6 +14,17 @@ import java.util.Map;
 */
 public interface LocationDao {
 
+	/**
+	 * 查询所有数据
+	 * @return 对象列表
+	 */
+	List<Location> queryAllLocation();
+
+	/**
+	 * 通过设备主键ID列表查询对应集合
+	 * @param idList 设备主键列表
+	 * @return 传输对象集合
+	 */
 	List<LocationDto> queryByDevIdList(List<Integer> idList);
 
 	/**
