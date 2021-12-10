@@ -5,6 +5,7 @@ import com.zust.service.LocationService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * (Location)表控制层
@@ -32,4 +33,8 @@ public class LocationController {
       return this.locationService.queryById(id);
   }
 
+	@GetMapping("getAll")
+	public List<Location> getAllLocation() {
+		return locationService.getAllLocation();
+	}
 }

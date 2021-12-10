@@ -93,10 +93,9 @@ public class ElectricityDataServiceImpl implements ElectricityDataService {
 				monthConsumption[i] = (float) (Math.round(monthConsumption[i] * 100.0) /100.0);
       }
     }
-		for (float v : monthConsumption) {
-			System.out.println(v);
-		}
-
+//		for (float v : monthConsumption) {
+//			System.out.println(v);
+//		}
 		return monthConsumption;
 	}
 

@@ -30,7 +30,7 @@ public class LocationServiceImpl implements LocationService {
 	 */
 	@Override
 	public List<Location> getAllLocation() {
-		return null;
+		return locationDao.queryAllLocation();
 	}
 
 	/**
