@@ -24,6 +24,28 @@ public class LocationServiceImpl implements LocationService {
 	private LocationDao locationDao;
 
 	/**
+	 * 通过房间ID查询
+	 *
+	 * @param roomId 房间ID
+	 * @return 实例对象集合
+	 */
+	@Override
+	public List<Location> getByRoomId(Integer roomId) {
+		return locationDao.queryByRoomId(roomId);
+	}
+
+	/**
+	 * 通过房间名查询
+	 *
+	 * @param roomNum 房间门牌号
+	 * @return 实例对象集合
+	 */
+	@Override
+	public List<Location> getByRoomNum(String roomNum) {
+		return locationDao.queryByRoom(roomNum);
+	}
+
+	/**
 	 * 查询所有数据
 	 *
 	 * @return 所有数据列表

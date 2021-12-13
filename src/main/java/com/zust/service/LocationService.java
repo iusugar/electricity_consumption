@@ -1,6 +1,7 @@
 package com.zust.service;
 
 import com.zust.dto.LocationDto;
+import com.zust.dto.RoomDto;
 import com.zust.entity.Location;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,20 @@ import java.util.Map;
  * @since 2021-11-18 16:01:42
  */
 public interface LocationService {
+
+	/**
+	 * 通过房间ID查询
+	 * @param roomId 房间ID
+	 * @return 实例对象集合
+	 */
+	List<Location> getByRoomId(Integer roomId);
+
+	/**
+	 * 通过房间名查询
+	 * @param roomNum 房间门牌号
+	 * @return 实例对象集合
+	 */
+	List<Location> getByRoomNum(String roomNum);
 
 	/**
 	 * 查询所有数据

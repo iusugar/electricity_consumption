@@ -19,6 +19,21 @@
         <result property="roomName" column="name" jdbcType="VARCHAR"/>
     </resultMap>
 
+    <select id="queryByRoomId" resultMap="BaseResultMap">
+        select
+            id, room_id, position, description
+        from electricity_consumption.location
+        where room_id = #{roomId}
+    </select>
+
+    <!--通过房间名查询-->
+    <select id="queryByRoom" resultMap="BaseResultMap">
+        SELECT location.id, room_id, position, location.description
+        FROM location,room
+        WHERE location.room_id = room.id AND room.name = #{room}
+    </select>
+
+    <!--查询所有的点位-->
     <select id="queryAllLocation" resultMap="BaseResultMap">
         select
             id, room_id, position, description

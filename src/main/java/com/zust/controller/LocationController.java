@@ -37,4 +37,9 @@ public class LocationController {
 	public List<Location> getAllLocation() {
 		return locationService.getAllLocation();
 	}
+
+	@GetMapping("getByRoom")
+	public List<Location> getByRoomNum(String room) {
+		return locationService.getByRoomNum(room);
+	}
 }
