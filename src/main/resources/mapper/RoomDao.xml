@@ -18,6 +18,22 @@
         <result property="devId" column="dev_id" jdbcType="INTEGER"/>
     </resultMap>
 
+    <select id="queryByNameAndPid" resultMap="BaseResultMap">
+        select
+            id, name, description, p_id
+        from electricity_consumption.room
+        where name = #{name} and p_id = #{pId}
+    </select>
+
+    <!--通过房间名查询-->
+    <select id="queryByRoomName" resultMap="BaseResultMap">
+        select
+            id, name, description, p_id
+        from electricity_consumption.room
+        where name = #{name}
+    </select>
+
+    <!--通过设备主键ID列表查询-->
     <select id="queryByDevIdList" resultMap="DtoResultMap">
         select room.id,room.name,room.description,room.p_id,location.position,device_status.dev_id
         from room,device_status,location

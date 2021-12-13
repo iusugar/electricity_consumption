@@ -13,13 +13,44 @@ import java.util.List;
 public interface RoomService {
 
 	/**
+	 * 通过房间名和pid查询单条数据
+	 * @param roomName 房间名
+	 * @param pId 父级ID
+	 * @return 实例对象
+	 */
+	Room getByRoomNameAndPid(String roomName, Integer pId);
+
+	/**
+	 * 通过房间名查询
+	 * @param name 房间名
+	 * @return 实例对象
+	 */
+	Room getByRoomName(String name);
+
+	/**
+	 * 添加一条房间数据
+	 * @param roomDto
+	 * @return
+	 */
+	Room insertRoom(RoomDto roomDto);
+
+	/**
+	 * 添加一条楼号数据
+	 * @param roomDto 数据传输对象
+	 * @return 实例对象
+	 */
+	Room insertBuilding(RoomDto roomDto);
+
+	/**
 	 * 查询有设备存在的所有房间集合
 	 * @return 传输对象集合
 	 */
 	List<RoomDto> getAllRoomByDevIdList(List<Integer> devIdList);
 
+
 	/**
-	 * 添加一个或者多个房间
+	 * transfer组件传值
+	 * 添加一个或者多个数据
 	 * @param l 房间列表
 	 * @return 成功消息
 	 */

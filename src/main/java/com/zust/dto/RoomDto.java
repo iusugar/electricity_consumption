@@ -18,4 +18,12 @@ public class RoomDto {
 
 	/*device表主键ID*/
 	private Integer devId;
+
+	// 用于接收前端tree组件创建房间和位置对象
+	private String checkedBuilding;
+	private String buildingDesc;
+	private String checkedRoom;
+	private String roomDesc;
+	private String location;
+	private String locationDesc;
 }

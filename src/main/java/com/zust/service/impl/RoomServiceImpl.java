@@ -20,6 +20,61 @@ public class RoomServiceImpl implements RoomService {
   @Resource
   private RoomDao roomDao;
 
+
+	/**
+	 * 通过房间名和pid查询单条数据
+	 *
+	 * @param roomName 房间名
+	 * @param pId      父级ID
+	 * @return 实例对象
+	 */
+	@Override
+	public Room getByRoomNameAndPid(String roomName, Integer pId) {
+		return roomDao.queryByNameAndPid(roomName,pId);
+	}
+
+	/**
+	 * 通过房间名查询
+	 *
+	 * @param name 房间名
+	 * @return 实例对象
+	 */
+	@Override
+	public Room getByRoomName(String name) {
+		return roomDao.queryByRoomName(name);
+	}
+
+	/**
+	 * 添加一条房间数据
+	 *
+	 * @param roomDto 数据传输对象
+	 * @return 实例对象
+	 */
+	@Override
+	public Room insertRoom(RoomDto roomDto) {
+		Room room = new Room();
+		room.setName(roomDto.getCheckedBuilding()+ "-" +roomDto.getCheckedRoom());
+		room.setDescription(roomDto.getRoomDesc());
+		room.setPId(roomDto.getPId());
+		roomDao.insert(room);
+		return room;
+	}
+
+	/**
+	 * 添加一条楼号数据
+	 *
+	 * @param roomDto 数据传输对象
+	 * @return 实例对象
+	 */
+	@Override
+	public Room insertBuilding(RoomDto roomDto) {
+		Room building = new Room();
+		building.setName(roomDto.getCheckedBuilding());
+		building.setDescription(roomDto.getBuildingDesc());
+		roomDao.insert(building);
+		return building;
+	}
+
 	/**
 	 * 查询有设备存在的所有房间集合
 	 *
@@ -30,9 +85,13 @@ public class RoomServiceImpl implements RoomService {
 		return roomDao.queryByDevIdList(devIdList);
 	}
 
+
 	/**
-   * 添加新的房间
-   */
+	 * transfer组件传值
+	 * 添加一个或者多个房间
+	 * @param l 房间列表
+	 * @return 成功消息
+	 */
   public String insert(List<String> l) {
 		String building = l.get(0).substring(0,l.get(0).indexOf("-"));
 		Room returnRoom = roomDao.queryByBuildingNum(building);

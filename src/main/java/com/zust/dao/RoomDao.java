@@ -13,6 +13,26 @@ import java.util.List;
  */
 public interface RoomDao {
 
+	/**
+	 * 通过房间名和pid查询单条数据
+	 * @param name 房间名
+	 * @param pId 父级ID
+	 * @return 实例对象
+	 */
+	Room queryByNameAndPid(String name, Integer pId);
+
+	/**
+	 * 通过房间名查询单条数据
+	 * @param name 房间名
+	 * @return 实例对象
+	 */
+	Room queryByRoomName(String name);
+
+	/**
+	 * 通过设备主键ID列表查询
+	 * @param devIdList 设备主键ID列表
+	 * @return 传输对象列表
+	 */
 	List<RoomDto> queryByDevIdList(List<Integer> devIdList);
 
 	/**
@@ -22,61 +42,61 @@ public interface RoomDao {
 	 */
 	Room queryByBuildingNum(@Param("buildingNum") String buildingNum);
 
-    /**
-     * 查询room表所有数据
-     * @return 对象列表
-     */
-    List<Room> queryAllRoom();
+  /**
+   * 查询room表所有数据
+   * @return 对象列表
+   */
+  List<Room> queryAllRoom();
 
 
-    /**
-     * 通过ID查询单条数据
-     *
-     * @param id 主键
-     * @return 实例对象
-     */
-    Room queryById(Integer id);
+  /**
+   * 通过ID查询单条数据
+   *
+   * @param id 主键
+   * @return 实例对象
+   */
+  Room queryById(Integer id);
 
-    /**
-     * 查询指定行数据
-     *
-     * @param offset 查询起始位置
-     * @param limit 查询条数
-     * @return 对象列表
-     */
-    List<Room> queryAllByLimit(@Param("offset") int offset, @Param("limit") int limit);
+  /**
+   * 查询指定行数据
+   *
+   * @param offset 查询起始位置
+   * @param limit 查询条数
+   * @return 对象列表
+   */
+  List<Room> queryAllByLimit(@Param("offset") int offset, @Param("limit") int limit);
 
 
-    /**
-     * 通过实体作为筛选条件查询
-     *
-     * @param room 实例对象
-     * @return 对象列表
-     */
-    List<Room> queryAll(Room room);
+  /**
+   * 通过实体作为筛选条件查询
+   *
+   * @param room 实例对象
+   * @return 对象列表
+   */
+  List<Room> queryAll(Room room);
 
-    /**
-     * 新增数据
-     *
-     * @param room 实例对象
-     * @return 影响行数
-     */
-    int insert(Room room);
+  /**
+   * 新增数据
+   *
+   * @param room 实例对象
+   * @return 影响行数
+   */
+  int insert(Room room);
 
-    /**
-     * 修改数据
-     *
-     * @param room 实例对象
-     * @return 影响行数
-     */
-    int update(Room room);
+  /**
+   * 修改数据
+   *
+   * @param room 实例对象
+   * @return 影响行数
+   */
+  int update(Room room);
 
-    /**
-     * 通过主键删除数据
-     *
-     * @param id 主键
-     * @return 影响行数
-     */
-    int deleteById(Integer id);
+  /**
+   * 通过主键删除数据
+   *
+   * @param id 主键
+   * @return 影响行数
+   */
+  int deleteById(Integer id);
 
 }
