@@ -15,6 +15,20 @@ import java.util.Map;
 public interface LocationDao {
 
 	/**
+	 * 通过房间ID查询
+	 * @param roomId 房间ID
+	 * @return 实例对象集合
+	 */
+	List<Location> queryByRoomId(Integer roomId);
+
+	/**
+	 * 通过房间名查询
+	 * @param room 房间门牌号
+	 * @return 实例对象集合
+	 */
+	List<Location> queryByRoom(String room);
+
+	/**
 	 * 查询所有数据
 	 * @return 对象列表
 	 */

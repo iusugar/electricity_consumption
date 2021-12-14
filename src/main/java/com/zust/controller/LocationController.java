@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * (Location)表控制层
@@ -41,5 +42,32 @@ public class LocationController {
 	@GetMapping("getByRoom")
 	public List<Location> getByRoomNum(String room) {
 		return locationService.getByRoomNum(room);
+	}
+	@GetMapping("getLocationInfo")
+	public Location getLocationInfo(String location,Integer id) {
+		return locationService.queryById(id);
+	}
+	// 更新位置信息
+	@PutMapping("updateLocationInfo")
+	public String updateLocationInfo(@RequestBody(required = false) Location location) {
+    System.out.println(location);
+		Location l = locationService.queryById(location.getId());
+		if (location.getDescription() == null || Objects.equals(location.getDescription(), "无")) {
+      location.setDescription("");
+		}
+		if (Objects.equals(location.getPosition(), l.getPosition()) && Objects.equals(location.getDescription(), l.getDescription())) {
+			return "exist";
+		}else {
+			locationService.update(location);
+			return "success";
+		}
+	}
+	// 删除一个位置
+	@DeleteMapping("deleteLocation")
+	public String deleteLocation(Integer id) {
+    if (locationService.deleteById(id)) {
+			return "success";
+    }
+		return "failed";
 	}
 }
