@@ -26,4 +26,8 @@ public class RoomDto {
 	private String roomDesc;
 	private String location;
 	private String locationDesc;
+
+	// 用于接收房间修改信息
+	private String infoRoom;
+	private String infoRoomDesc;
 }

@@ -55,56 +55,73 @@ public class RoomController {
       return "failed";
   }
 
+	// 添加一个新的房间位置
 	@PostMapping("addNew")
 	public String addNewRoom(@RequestBody RoomDto roomDto) {
-    System.out.println(roomDto);
 		Room building = roomService.getByRoomName(roomDto.getCheckedBuilding());
 		Room room = null;
 		List<Location> locationList = null;
 		if (building != null) {
-			room = roomService.getByRoomNameAndPid(roomDto.getCheckedRoom(),building.getId());
+      System.out.println("building true");
+			room = roomService.getByRoomNameAndPid(roomDto.getCheckedBuilding() + "-" + roomDto.getCheckedRoom(),building.getId());
 		}
 		if (room != null) {
 			locationList = locationService.getByRoomId(room.getId());
 		}
-    System.out.println(locationList);
 		if (locationList != null && locationList.size() > 0) {
 			for (Location location : locationList) {
 				if (Objects.equals(location.getPosition(),roomDto.getLocation())) {
-					System.out.println("存在true");
 					return "exist";
 				}
 			}
 		}
-
+		Location location = new Location();
+		location.setPosition(roomDto.getLocation());
+		location.setDescription(roomDto.getLocationDesc());
 		if (building == null) {
 			Room returnBuilding = roomService.insertBuilding(roomDto);
 			roomDto.setPId(returnBuilding.getId());
 			Room returnRoom = roomService.insertRoom(roomDto);
-			Location location = new Location();
 			location.setRoomId(returnRoom.getId());
-			location.setPosition(roomDto.getLocation());
-			location.setDescription(roomDto.getLocationDesc());
-			locationService.insert(location);
 		} else if (room == null) {
 			roomDto.setPId(building.getId());
 			Room returnRoom = roomService.insertRoom(roomDto);
-			Location location = new Location();
 			location.setRoomId(returnRoom.getId());
-			location.setPosition(roomDto.getLocation());
-			location.setDescription(roomDto.getLocationDesc());
-			locationService.insert(location);
 		} else {
-			Location location = new Location();
 			location.setRoomId(room.getId());
-			location.setPosition(roomDto.getLocation());
-			location.setDescription(roomDto.getLocationDesc());
-			locationService.insert(location);
 		}
+		locationService.insert(location);
 		return "success";
 	}
+	// 校验是否存在  未用
 	@PostMapping("checkRoomIsExist")
 	public String checkIsExist(@RequestBody RoomDto roomDto) {
 		return null;
+	}
+
+	// 获取房间的具体信息 参数是房间名
+	@GetMapping("getRoomInfo")
+	public Room getRoomInfo(String name, Integer id) {
+		return roomService.queryById(id);
+	}
+	// 更新房间信息
+	@PutMapping("updateRoom")
+	public String updateRoomInfo(@RequestBody RoomDto roomDto) {
+		Room room = roomService.queryById(roomDto.getId());
+		if (room != null && Objects.equals(room.getName(), roomDto.getInfoRoom()) && Objects.equals(room.getDescription(),roomDto.getInfoRoomDesc())) {
+			return "exist";
+		}
+		assert room != null;
+		room.setName(roomDto.getInfoRoom());
+		room.setDescription(roomDto.getInfoRoomDesc());
+		roomService.update(room);
+		return "success";
+	}
+	// 删除一个房间
+	@DeleteMapping("deleteRoom")
+	public String deleteRoom(Integer id) {
+		roomService.deleteById(id);
+		roomService.deleteByPid(id);
+		return "success";
 	}
 }

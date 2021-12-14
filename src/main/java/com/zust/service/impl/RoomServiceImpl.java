@@ -22,6 +22,17 @@ public class RoomServiceImpl implements RoomService {
 
 
 	/**
+	 * 通过主键删除数据
+	 *
+	 * @param pid pid字段
+	 * @return 是否成功
+	 */
+	@Override
+	public boolean deleteByPid(Integer pid) {
+		return roomDao.deleteByPid(pid) > 0;
+	}
+
+	/**
 	 * 通过房间名和pid查询单条数据
 	 *
 	 * @param roomName 房间名

@@ -18,6 +18,12 @@
         <result property="devId" column="dev_id" jdbcType="INTEGER"/>
     </resultMap>
 
+    <!--通过pid字段删除-->
+    <delete id="deleteByPid">
+        delete from electricity_consumption.room where p_id = #{pid}
+    </delete>
+
+    <!--通过房间名和pid查找-->
     <select id="queryByNameAndPid" resultMap="BaseResultMap">
         select
             id, name, description, p_id

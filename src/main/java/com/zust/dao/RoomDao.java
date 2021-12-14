@@ -14,6 +14,13 @@ import java.util.List;
 public interface RoomDao {
 
 	/**
+	 * 通过pid字段删除
+	 * @param pid pid字段
+	 * @return 影响行数
+	 */
+	int deleteByPid(Integer pid);
+
+	/**
 	 * 通过房间名和pid查询单条数据
 	 * @param name 房间名
 	 * @param pId 父级ID

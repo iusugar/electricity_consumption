@@ -13,6 +13,14 @@ import java.util.List;
 public interface RoomService {
 
 	/**
+	 * 通过主键删除数据
+	 *
+	 * @param pid pid字段
+	 * @return 是否成功
+	 */
+	boolean deleteByPid(Integer pid);
+
+	/**
 	 * 通过房间名和pid查询单条数据
 	 * @param roomName 房间名
 	 * @param pId 父级ID
