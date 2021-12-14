@@ -159,6 +159,7 @@ public class ElectricityDataServiceImpl implements ElectricityDataService {
 				total += Float.parseFloat(o.toString());
 			}
 		}
+		total = (float) (Math.round(total * 100.0) /100.0);
 		return total;
 	}
 
@@ -180,6 +181,7 @@ public class ElectricityDataServiceImpl implements ElectricityDataService {
 				total += Float.parseFloat(o.toString());
 			}
     }
+		total = (float) (Math.round(total * 100.0) /100.0);
 		return total;
 	}
 
