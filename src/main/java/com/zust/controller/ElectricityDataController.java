@@ -1,5 +1,6 @@
 package com.zust.controller;
 
+import com.zust.dto.ElectricityDto;
 import com.zust.entity.ElectricityData;
 import com.zust.service.ElectricityDataService;
 import org.springframework.web.bind.annotation.*;
@@ -46,26 +47,31 @@ public class ElectricityDataController {
 	public float getCurrentMonthConsumption() {
 		return electricityDataService.getCurrentMonthConsumption();
 	}
+
 	//返回上月用电量
 	@GetMapping("getLastMonthC")
 	public float getLastMonthConsumption() {
 		return electricityDataService.getLastMonthConsumption();
 	}
+
 	// 上面两个方法的结合
 	@GetMapping("getMonthC")
 	public String getMonthConsumption() {
 		return electricityDataService.getCurrentMonthConsumption() + "," + electricityDataService.getLastMonthConsumption();
 	}
+
 	// 返回今日用电量和昨日用电量
 	@GetMapping("getDayC")
 	public String getDayConsumption() {
 		return electricityDataService.getTodayConsumption() + "," + electricityDataService.getYesterdayConsumption();
 	}
+
 	// 返回一年12个月的用电量
 	@GetMapping("getYearC")
 	public float[] getYearConsumption() {
 		return electricityDataService.getLastYearMonthConsumption();
 	}
+
 	// 返回指定日期一天的功率变化(24小时)
 	@GetMapping("getDayTotalPower")
 	public float[] getAppointedDayTotalPower() {
@@ -74,5 +80,17 @@ public class ElectricityDataController {
 		c.add(Calendar.DAY_OF_MONTH, -1);
 		Date yesterday = c.getTime();
 		return electricityDataService.getAppointDayTotalPower(yesterday);
+	}
+
+	// 返回近七天用电最多的六个设备
+	@GetMapping("getConsumedMost")
+	public List<ElectricityDto> getConsumedMost() {
+		return electricityDataService.getWeekConsumedMostDevice();
+	}
+
+	// 返回近七天每天的耗电量
+	@GetMapping("getEachDayConsumption")
+	public List<ElectricityDto> getWeekEachDayConsumption() {
+		return electricityDataService.getWeekEachDayConsumption();
 	}
 }

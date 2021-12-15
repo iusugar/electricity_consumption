@@ -1,5 +1,6 @@
 package com.zust.service;
 
+import com.zust.dto.ElectricityDto;
 import com.zust.entity.ElectricityData;
 
 import javax.xml.crypto.Data;
@@ -14,6 +15,18 @@ import java.util.Map;
  * @since 2021-11-18 16:01:42
  */
 public interface ElectricityDataService {
+
+	/**
+	 * 获取近七天每天的耗电量
+	 * @return 七天耗电量列表
+	 */
+	List<ElectricityDto> getWeekEachDayConsumption();
+
+	/**
+	 * 获取近七天消耗最多的6个设备
+	 * @return 数据传输对象列表
+	 */
+	List<ElectricityDto> getWeekConsumedMostDevice();
 
 	/**
 	 * 获取指定日期一天总用电功率(24小时)

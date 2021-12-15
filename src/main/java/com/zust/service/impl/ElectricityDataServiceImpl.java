@@ -1,6 +1,9 @@
 package com.zust.service.impl;
 
+import com.zust.dao.DeviceDao;
 import com.zust.dao.DeviceStatusDao;
+import com.zust.dto.ElectricityDto;
+import com.zust.entity.Device;
 import com.zust.entity.DeviceStatus;
 import com.zust.entity.ElectricityData;
 import com.zust.dao.ElectricityDataDao;
@@ -22,11 +25,76 @@ import java.util.List;
  */
 @Service("electricityDataService")
 public class ElectricityDataServiceImpl implements ElectricityDataService {
-    @Resource
-    private ElectricityDataDao electricityDataDao;
-		@Resource
-		private DeviceStatusDao deviceStatusDao;
+  @Resource
+  private ElectricityDataDao electricityDataDao;
+	@Resource
+	private DeviceStatusDao deviceStatusDao;
+	@Resource
+	private DeviceDao deviceDao;
 
+
+	/**
+	 * 获取近七天每天的耗电量
+	 *
+	 * @return 七天耗电量列表
+	 */
+	@Override
+	public List<ElectricityDto> getWeekEachDayConsumption() {
+		List<ElectricityDto> dtoList = new ArrayList<>();
+		List<ElectricityData> eList = electricityDataDao.queryWeekHaveUsageHistory();
+		for (int i = 7; i > 0; i--) {
+			float total = 0;
+			ElectricityDto dto = new ElectricityDto();
+      for (ElectricityData data : eList) {
+				float consumption = 0;
+				if (electricityDataDao.weekEachDayConsumptionById(i,data.getDevId()) != null) {
+					consumption = Float.parseFloat(electricityDataDao.weekEachDayConsumptionById(i,data.getDevId()).toString());
+				}
+				total += (float) Math.round(consumption * 100.0) / 100;
+      }
+			dto.setConsumption(total);
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(new Date());
+			calendar.add(Calendar.DATE, -i);
+			dto.setCreateTime(calendar.getTime());
+			dtoList.add(dto);
+		}
+		return dtoList;
+	}
+
+	/**
+	 * 获取近七天消耗最多的6个设备
+	 *
+	 * @return 数据传输对象列表
+	 */
+	@Override
+	public List<ElectricityDto> getWeekConsumedMostDevice() {
+		List<ElectricityDto> dtoList = new ArrayList<>();
+		List<ElectricityData> eList = electricityDataDao.queryWeekHaveUsageHistory();
+    for (ElectricityData data : eList) {
+			ElectricityDto dto = new ElectricityDto();
+	    Device device = deviceDao.queryById(data.getDevId());
+			dto.setDeviceId(device.getDeviceId());
+			dto.setDevId(data.getDevId());
+			float consumption = Float.parseFloat(electricityDataDao.weekConsumptionByDevId(data.getDevId()).toString());
+			dto.setConsumption((float) Math.round(consumption * 100.0) / 100);
+			dtoList.add(dto);
+    }
+		dtoList.sort((b,a) -> Float.compare(a.getConsumption(),b.getConsumption()));
+		if (dtoList.size() < 6) {
+			int cycle = 6 - dtoList.size();
+			for (int i = 0; i < cycle; i++) {
+				ElectricityDto dto = new ElectricityDto();
+				dto.setDevId(0);
+				dto.setDeviceId("0");
+				dto.setConsumption(0);
+				dtoList.add(dto);
+			}
+			return dtoList;
+		} else {
+			return dtoList.subList(0,6);
+		}
+	}
 
 	/**
 	 * 获取指定日期一天总用电功率(24小时)

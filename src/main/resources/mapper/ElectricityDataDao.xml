@@ -13,6 +13,42 @@
         <result property="consumption" column="consumption" jdbcType="OTHER"/>
     </resultMap>
 
+    <select id="weekEachDayConsumptionById" resultType="Object">
+        SELECT
+            (SELECT consumption
+             FROM electricity_data
+             WHERE DATE(create_time) = DATE_SUB(CURRENT_DATE,INTERVAL #{day} day) AND dev_id = #{devId}
+             ORDER BY id DESC LIMIT 1)
+        -
+            (SELECT consumption
+             FROM electricity_data
+             WHERE DATE(create_time) = DATE_SUB(CURRENT_DATE,INTERVAL #{day} day) AND dev_id = #{devId}
+             ORDER BY id LIMIT 1)
+    </select>
+
+    <!--查找最近一周有使用记录的设备-->
+    <select id="queryWeekHaveUsageHistory" resultMap="BaseResultMap">
+        SELECT id,dev_id,create_time
+        FROM electricity_data
+        WHERE DATE(create_time) > DATE_SUB(CURRENT_DATE,INTERVAL 8 day)
+        GROUP BY dev_id
+    </select>
+
+    <!--通过设备主键ID查询一周的用电量 (从今天往前的一周)-->
+    <select id="weekConsumptionByDevId" resultType="Object">
+        SELECT
+            (SELECT consumption
+             FROM electricity_data
+             WHERE dev_id = #{devId} AND DATE(create_time) > DATE_SUB(CURRENT_DATE,INTERVAL 8 day)
+             GROUP BY DATE(create_time)
+             ORDER BY id DESC LIMIT 1)
+        -
+            (SELECT consumption
+             FROM electricity_data
+             WHERE dev_id = #{devId} AND DATE(create_time) > DATE_SUB(CURRENT_DATE,INTERVAL 8 day)
+             GROUP BY DATE(create_time) LIMIT 1)
+    </select>
+
     <!--根据插座主键Id查询每个月最后一条用电记录按照月份排序-->
     <select id="lastYearMonthLastConsumptionById" resultMap="BaseResultMap">
         SELECT *

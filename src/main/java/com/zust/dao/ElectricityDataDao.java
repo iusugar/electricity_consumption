@@ -14,6 +14,27 @@ import java.util.List;
 public interface ElectricityDataDao {
 
 	/**
+	 * 获取指定ID设备在指定一天的用电量
+	 * @param day 天数差值
+	 * @param devId 设备主键ID
+	 * @return 用电量
+	 */
+	Object weekEachDayConsumptionById(Integer day, Integer devId);
+
+	/**
+	 * 查询最近一周有用电记录的插座
+	 * @return 实例对象列表
+	 */
+	List<ElectricityData> queryWeekHaveUsageHistory();
+
+	/**
+	 * 获取指定ID插座一周用电量
+	 * @param devId 设备主键ID
+	 * @return 用电量
+	 */
+	Object weekConsumptionByDevId(Integer devId);
+
+	/**
 	 * 通过设备主键查询去年每月最后一条用电数据
 	 * @param devId 设备主键
 	 * @return 单个设备的每月用电数据列表
