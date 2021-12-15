@@ -62,7 +62,6 @@ public class RoomController {
 		Room room = null;
 		List<Location> locationList = null;
 		if (building != null) {
-      System.out.println("building true");
 			room = roomService.getByRoomNameAndPid(roomDto.getCheckedBuilding() + "-" + roomDto.getCheckedRoom(),building.getId());
 		}
 		if (room != null) {
@@ -107,6 +106,9 @@ public class RoomController {
 	// 更新房间信息
 	@PutMapping("updateRoom")
 	public String updateRoomInfo(@RequestBody RoomDto roomDto) {
+		if (Objects.equals(roomDto.getInfoRoomDesc(), "无")) {
+			roomDto.setInfoRoomDesc("");
+		}
 		Room room = roomService.queryById(roomDto.getId());
 		if (room != null && Objects.equals(room.getName(), roomDto.getInfoRoom()) && Objects.equals(room.getDescription(),roomDto.getInfoRoomDesc())) {
 			return "exist";
@@ -120,8 +122,9 @@ public class RoomController {
 	// 删除一个房间
 	@DeleteMapping("deleteRoom")
 	public String deleteRoom(Integer id) {
-		roomService.deleteById(id);
 		roomService.deleteByPid(id);
+		roomService.deleteById(id);
+//		locationService.getByRoomId()
 		return "success";
 	}
 }
