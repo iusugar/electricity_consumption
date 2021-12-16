@@ -2,6 +2,7 @@ package com.zust;
 
 import com.zust.dao.*;
 import com.zust.dto.DeviceDto;
+import com.zust.dto.ElectricityDto;
 import com.zust.dto.RoomDto;
 import com.zust.dto.StatusDto;
 import com.zust.entity.Device;
@@ -11,6 +12,7 @@ import com.zust.entity.Location;
 import com.zust.service.ElectricityDataService;
 import com.zust.service.HistoricalStatusService;
 import com.zust.service.LocationService;
+import com.zust.service.RoomService;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -27,6 +29,8 @@ class ElectricityConsumptionApplicationTests {
 	DeviceDao deviceDao;
 	@Resource
 	RoomDao roomDao;
+	@Resource
+	RoomService roomService;
 	@Resource
 	DeviceStatusDao dsDao;
 	@Resource
@@ -112,11 +116,33 @@ class ElectricityConsumptionApplicationTests {
 	@Test
 	void testGetWeekOnline() {
 //    System.out.println(hsd.queryWeekEachHourOnlineNumber(1,14,0));
-		hsService.getWeekEachHourOnlineNumber();
+		hsService.getWeekEachHourOnlineCount();
 	}
 	@Test
 	void testGetAllLocation() {
 		List<Location> l = locationDao.queryAllLocation();
     l.forEach(System.out::println);
+	}
+	@Test
+	void testInsertBuilding() {
+		RoomDto roomDto = new RoomDto();
+		roomDto.setCheckedBuilding("A55");
+		roomDto.setBuildingDesc("测试楼号");
+		roomService.insertBuilding(roomDto);
+	}
+	@Test
+	void testGetWeekUseDevice() {
+		List<ElectricityDto> l = eds.getWeekConsumedMostDevice();
+    l.forEach(System.out::println);
+	}
+	@Test
+	void testGetWeekEachDayConsumption() {
+//    System.out.println(ed.weekEachDayConsumptionById(2, 63));
+		List<ElectricityDto> l = eds.getWeekEachDayConsumption();
+    l.forEach(System.out::println);
+	}
+	@Test
+	void testGetId() {
+		hsService.getWeekHourOnlineCount();
 	}
 }

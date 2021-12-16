@@ -1,12 +1,17 @@
 package com.zust.service.impl;
 
+import com.zust.dao.ElectricityDataDao;
+import com.zust.entity.ElectricityData;
 import com.zust.entity.HistoricalStatus;
 import com.zust.dao.HistoricalStatusDao;
 import com.zust.service.HistoricalStatusService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * (HistoricalStatus)表服务实现类
@@ -18,20 +23,66 @@ import java.util.List;
 public class HistoricalStatusServiceImpl implements HistoricalStatusService {
   @Resource
   private HistoricalStatusDao historicalStatusDao;
+	@Resource
+	private ElectricityDataDao electricityDataDao;
 
+	/**
+	 * 查询一周每个小时在线设备数
+	 *
+	 * @return
+	 */
+	@Override
+	public Integer[][] getWeekHourOnlineCount() {
+		Integer[][] onlineData = new Integer[168][3];
+		List<ElectricityData> eList = electricityDataDao.queryWeekHaveUsageHistory();
+		List<Integer> idList = eList.stream().map(data -> data.getDevId()).collect(Collectors.toList());
+//		for (int i = 0,sub = 0; i < 7; i++) {
+//			for (int j = 0; j < 24; j++) {
+//				onlineData[sub][0] = i;
+//				onlineData[sub][1] = j;
+//				sub++;
+//			}
+//		}
+		// 计算今天是一周中的第几天
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(new Date());
+		int whichDay = cal.get(Calendar.DAY_OF_WEEK) - 1;
+		for (int i = 0,sub = 0; i < 7; i++) {
+			for (int j = 0; j < 24; j++) {
+				onlineData[sub][0] = i;
+				onlineData[sub][1] = j;
+				int total = 0;
+				if (whichDay >= 0) {
+					for (Integer id : idList) {
+						HistoricalStatus hs = historicalStatusDao.queryWeekHourOnlineByDevId(id,whichDay,j,0);
+						if (hs != null && (Boolean) hs.getStatus()) {
+							total++;
+						}
+					}
+				}
+				onlineData[sub][2] = total;
+				sub++;
+			}
+			whichDay--;
+		}
+
+		return onlineData;
+	}
+
+	// 数据不全 只能查找到每天在线的设备  弃用
 	/**
 	 * 查询一周每个小时在线的设备数
 	 *
 	 * @return 在线数据
 	 */
 	@Override
-	public Integer[][] getWeekEachHourOnlineNumber() {
+	public Integer[][] getWeekEachHourOnlineCount() {
 		Integer[][] onlineData = new Integer[168][3];
 		for (int i = 0,sub = 0; i < 7; i++) {
 			for (int j = 0; j < 24; j++) {
 				onlineData[sub][0] = i;
 				onlineData[sub][1] = j;
-				onlineData[sub][2] =historicalStatusDao.queryWeekEachHourOnlineNumber(i,j,0);
+				onlineData[sub][2] =historicalStatusDao.queryWeekEachHourOnlineCount(i,j,0);
 				sub++;
 			}
 		}

@@ -139,6 +139,7 @@ public class MyMqttCallback implements MqttCallbackExtended {
 
 	public void handleStateMessage(MqttMessage stateMsg) throws JsonProcessingException {
 //        \{([^{}]*)\}
+		// 如果接收到的状态和数据库保存的最新状态不一致 && 今天还没有记录过新的状态 才会进行插入
 		String stateString = stateMsg.toString();
 		Pattern pattern = Pattern.compile("\\{([^{}]*)\\}");
 		Matcher matcher = pattern.matcher(stateString);

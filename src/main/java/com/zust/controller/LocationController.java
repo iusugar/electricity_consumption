@@ -41,12 +41,15 @@ public class LocationController {
 
 	@GetMapping("getByRoom")
 	public List<Location> getByRoomNum(String room) {
+    System.out.println(room);
 		return locationService.getByRoomNum(room);
 	}
+
 	@GetMapping("getLocationInfo")
 	public Location getLocationInfo(String location,Integer id) {
 		return locationService.queryById(id);
 	}
+
 	// 更新位置信息
 	@PutMapping("updateLocationInfo")
 	public String updateLocationInfo(@RequestBody(required = false) Location location) {
@@ -62,6 +65,7 @@ public class LocationController {
 			return "success";
 		}
 	}
+
 	// 删除一个位置
 	@DeleteMapping("deleteLocation")
 	public String deleteLocation(Integer id) {

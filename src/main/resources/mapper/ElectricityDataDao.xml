@@ -13,6 +13,7 @@
         <result property="consumption" column="consumption" jdbcType="OTHER"/>
     </resultMap>
 
+    <!--通过设备主键ID查询一周每天的耗电量-->
     <select id="weekEachDayConsumptionById" resultType="Object">
         SELECT
             (SELECT consumption

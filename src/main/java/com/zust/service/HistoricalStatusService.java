@@ -12,10 +12,17 @@ import java.util.List;
 public interface HistoricalStatusService {
 
 	/**
+	 * 查询一周每个小时在线设备数
+	 * @return
+	 */
+	Integer[][] getWeekHourOnlineCount();
+
+	// 弃用
+	/**
 	 * 查询一周每个小时在线的设备数
 	 * @return 在线数据
 	 */
-	Integer[][] getWeekEachHourOnlineNumber();
+	Integer[][] getWeekEachHourOnlineCount();
 
 	/**
 	 * 通过设备主键ID查询

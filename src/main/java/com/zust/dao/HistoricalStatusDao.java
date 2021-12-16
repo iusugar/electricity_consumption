@@ -12,6 +12,18 @@ import java.util.List;
  */
 public interface HistoricalStatusDao {
 
+
+	/**
+	 * 查找插座本周每天每个小时之前最新的一条记录 用于统计每小时插座在线数量
+	 * @param devId 设备主键ID
+	 * @param day 值为0-6 选择今日在内的近七天
+	 * @param hour 值为0-23 选择小时
+	 * @param week 值为0或1 选择本周或上周 1表示上周
+	 * @return 实例对象
+	 */
+	HistoricalStatus queryWeekHourOnlineByDevId(Integer devId,Integer day,Integer hour,Integer week);
+
+	// 弃用 换另一个
 	/**
 	 * 查询本周指定一天指定小时在线设备数量
 	 * @param day 值为0-7 选择周一到周日
@@ -19,7 +31,7 @@ public interface HistoricalStatusDao {
 	 * @param week 值为0或1 选择本周或上周 1表示上周
 	 * @return 设备数量
 	 */
-	Integer queryWeekEachHourOnlineNumber(Integer day,Integer hour,Integer week);
+	Integer queryWeekEachHourOnlineCount(Integer day,Integer hour,Integer week);
 
 	/**
 	 * 通过设备主键ID查询单条数据

@@ -31,8 +31,10 @@ public class HistoricalStatusController {
   public HistoricalStatus selectOne(Integer id) {
       return this.historicalStatusService.queryById(id);
   }
-	@GetMapping("getOnlineNumber")
-	public Integer[][] getWeekEachHourOnlineNumber() {
-		return historicalStatusService.getWeekEachHourOnlineNumber();
+
+	// 返回一周每天每个小时在线设备数量
+	@GetMapping("getOnlineDeviceCount")
+	public Integer[][] getWeekEachHourOnlineCount() {
+		return historicalStatusService.getWeekHourOnlineCount();
 	}
 }
