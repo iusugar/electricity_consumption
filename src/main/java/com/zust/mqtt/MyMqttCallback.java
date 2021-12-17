@@ -176,7 +176,7 @@ public class MyMqttCallback implements MqttCallbackExtended {
 //					} else if ((Boolean) newStatus == hs.getStatus()){
 //            System.out.println(false);
 //					}
-					if (!hsDate.equals(today) || newStatus != (Boolean) hs.getStatus()) {
+					if (newStatus != (Boolean) hs.getStatus()) {
 						hs.setCreateTime(new Date());
 						hs.setStatus(result.get("status"));
 						hs.setDevId(device.getId());

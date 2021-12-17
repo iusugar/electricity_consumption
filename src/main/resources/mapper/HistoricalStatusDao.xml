@@ -9,6 +9,30 @@
         <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
         <result property="status" column="status" jdbcType="OTHER"/>
     </resultMap>
+    <resultMap id="DtoResultMap" type="com.zust.dto.HistoricalDto">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="devId" column="dev_id" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="status" column="status" jdbcType="OTHER"/>
+        <result property="deviceId" column="device_id" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询最近20条设备的上下线记录-->
+    <select id="queryRecentlyActivities" resultMap="DtoResultMap">
+        SELECT historical_status.id,historical_status.dev_id,historical_status.create_time,historical_status.status,device.device_id
+        FROM historical_status,device
+        WHERE dev_id = device.id
+        ORDER BY id DESC
+            LIMIT 20
+    </select>
+
+    <!--通过设备主键ID查找上下线记录-->
+    <select id="queryActivitiesHistoriesDataByDevId" resultMap="BaseResultMap">
+        SELECT id,dev_id,create_time,status
+        FROM historical_status
+        WHERE dev_id = #{devId}
+        ORDER BY id DESC
+    </select>
 
     <!--查找插座本周每天每个小时之前最新的一条记录 用于统计每小时插座在线数量-->
     <select id="queryWeekHourOnlineByDevId" resultMap="BaseResultMap">

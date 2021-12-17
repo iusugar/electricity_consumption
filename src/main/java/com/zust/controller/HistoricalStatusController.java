@@ -1,10 +1,12 @@
 package com.zust.controller;
 
+import com.zust.dto.HistoricalDto;
 import com.zust.entity.HistoricalStatus;
 import com.zust.service.HistoricalStatusService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * (HistoricalStatus)表控制层
@@ -36,5 +38,17 @@ public class HistoricalStatusController {
 	@GetMapping("getOnlineDeviceCount")
 	public Integer[][] getWeekEachHourOnlineCount() {
 		return historicalStatusService.getWeekHourOnlineCount();
+	}
+
+	// 返回设备上下线记录
+	@GetMapping("deviceActivitiesData")
+	public List<HistoricalStatus> getDeviceActivitiesHistoricalData(Integer id) {
+		return historicalStatusService.getActivitiesHistoriesData(id);
+	}
+
+	// 返回最近设备上下线记录
+	@GetMapping("recentlyActivitiesData")
+	public List<HistoricalDto> getRecentlyActivitiesData() {
+		return historicalStatusService.getRecentlyActivities();
 	}
 }

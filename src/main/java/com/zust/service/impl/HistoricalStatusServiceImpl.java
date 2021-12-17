@@ -1,6 +1,7 @@
 package com.zust.service.impl;
 
 import com.zust.dao.ElectricityDataDao;
+import com.zust.dto.HistoricalDto;
 import com.zust.entity.ElectricityData;
 import com.zust.entity.HistoricalStatus;
 import com.zust.dao.HistoricalStatusDao;
@@ -25,6 +26,27 @@ public class HistoricalStatusServiceImpl implements HistoricalStatusService {
   private HistoricalStatusDao historicalStatusDao;
 	@Resource
 	private ElectricityDataDao electricityDataDao;
+
+	/**
+	 * 查找最近20条设备上下线记录
+	 *
+	 * @return 对象列表
+	 */
+	@Override
+	public List<HistoricalDto> getRecentlyActivities() {
+		return historicalStatusDao.queryRecentlyActivities();
+	}
+
+	/**
+	 * 查询指定ID设备的上下线记录
+	 *
+	 * @param devId 设备主键ID
+	 * @return 对象列表
+	 */
+	@Override
+	public List<HistoricalStatus> getActivitiesHistoriesData(Integer devId) {
+		return historicalStatusDao.queryActivitiesHistoriesDataByDevId(devId);
+	}
 
 	/**
 	 * 查询一周每个小时在线设备数

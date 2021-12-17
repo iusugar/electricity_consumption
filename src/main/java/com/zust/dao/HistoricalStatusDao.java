@@ -1,5 +1,6 @@
 package com.zust.dao;
 
+import com.zust.dto.HistoricalDto;
 import com.zust.entity.HistoricalStatus;
 import org.apache.ibatis.annotations.Param;
 import java.util.List;
@@ -12,6 +13,18 @@ import java.util.List;
  */
 public interface HistoricalStatusDao {
 
+	/**
+	 * 查找最近20条设备的上下线情况
+	 * @return
+	 */
+	List<HistoricalDto> queryRecentlyActivities();
+
+	/**
+	 * 通过设备主键ID查询上下线记录
+	 * @param DevId 设备主键ID
+	 * @return 对象列表
+	 */
+	List<HistoricalStatus> queryActivitiesHistoriesDataByDevId(Integer DevId);
 
 	/**
 	 * 查找插座本周每天每个小时之前最新的一条记录 用于统计每小时插座在线数量

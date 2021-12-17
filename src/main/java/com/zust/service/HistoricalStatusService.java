@@ -1,5 +1,6 @@
 package com.zust.service;
 
+import com.zust.dto.HistoricalDto;
 import com.zust.entity.HistoricalStatus;
 import java.util.List;
 
@@ -10,6 +11,19 @@ import java.util.List;
  * @since 2021-12-07 09:33:43
  */
 public interface HistoricalStatusService {
+
+	/**
+	 * 查找最近20条设备上下线记录
+	 * @return 对象列表
+	 */
+	List<HistoricalDto> getRecentlyActivities();
+
+	/**
+	 * 查询指定ID设备的上下线记录
+	 * @param devId 设备主键ID
+	 * @return 对象列表
+	 */
+	List<HistoricalStatus> getActivitiesHistoriesData(Integer devId);
 
 	/**
 	 * 查询一周每个小时在线设备数
