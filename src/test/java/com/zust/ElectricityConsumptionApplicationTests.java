@@ -5,10 +5,7 @@ import com.zust.dto.DeviceDto;
 import com.zust.dto.ElectricityDto;
 import com.zust.dto.RoomDto;
 import com.zust.dto.StatusDto;
-import com.zust.entity.Device;
-import com.zust.entity.DeviceStatus;
-import com.zust.entity.ElectricityData;
-import com.zust.entity.Location;
+import com.zust.entity.*;
 import com.zust.service.ElectricityDataService;
 import com.zust.service.HistoricalStatusService;
 import com.zust.service.LocationService;
@@ -141,8 +138,12 @@ class ElectricityConsumptionApplicationTests {
 		List<ElectricityDto> l = eds.getWeekEachDayConsumption();
     l.forEach(System.out::println);
 	}
+
 	@Test
-	void testGetId() {
-		hsService.getWeekHourOnlineCount();
+	void testGetHourOnline() {
+//		hsService.getWeekHourOnlineCount();
+//		Boolean b = hsd.queryWeekHourOnlineByDevId(88,3,16,0);
+//    System.out.println(b);
+//		deviceDao.queryByTimePoint(3,16);
 	}
 }

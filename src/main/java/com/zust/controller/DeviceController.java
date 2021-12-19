@@ -43,6 +43,7 @@ public class DeviceController {
 		return "success";
   }
 
+	// 添加设备前先查询是否存在
 	@GetMapping("isExist")
 	public String checkDeviceIsExist(@RequestParam(value = "deviceId",required = false) String deviceId) {
 		if (deviceService.queryByDeviceId(deviceId) != null) {
@@ -51,6 +52,7 @@ public class DeviceController {
 		return null;
 	}
 
+	// 返回该房间中的设备
 	@GetMapping("getRoomDevice")
 	public List<DeviceDto> getDeviceByRoom(String room) {
 		return deviceService.queryByRoomNum(room);
@@ -66,13 +68,21 @@ public class DeviceController {
 		return deviceService.getByOptions(dto.getUsageDesc(),dto.getDeviceId(),dto.getBuildNum(),dto.getRoomNum());
 	}
 
+	// 更新设备数据
 	@PutMapping("update")
 	public String updateDevice(@RequestBody(required = false)DeviceDto deviceDto) {
 		return deviceService.updateDevice(deviceDto);
 	}
 
+	// 删除设备
 	@DeleteMapping("delete")
 	public String deleteDevice(@RequestBody(required = false) String deviceId) {
 		return deviceService.deleteByDeviceId(deviceId);
+	}
+
+	@GetMapping("getOnlineDevice")
+	public List<Device> getTimePointOnlineDevice(Integer day, Integer hour) {
+    System.out.println(day + ":" + hour);
+		return deviceService.getOnlineDeviceByTimePoint(day,hour);
 	}
 }

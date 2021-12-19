@@ -13,6 +13,7 @@ import java.util.List;
  */
 public interface HistoricalStatusDao {
 
+
 	/**
 	 * 查找最近20条设备的上下线情况
 	 * @return
@@ -34,7 +35,7 @@ public interface HistoricalStatusDao {
 	 * @param week 值为0或1 选择本周或上周 1表示上周
 	 * @return 实例对象
 	 */
-	HistoricalStatus queryWeekHourOnlineByDevId(Integer devId,Integer day,Integer hour,Integer week);
+	Boolean queryWeekHourOnlineByDevId(Integer devId,Integer day,Integer hour,Integer week);
 
 	// 弃用 换另一个
 	/**

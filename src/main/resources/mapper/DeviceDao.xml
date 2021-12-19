@@ -27,7 +27,16 @@
         <result property="roomNum" column="name" jdbcType="VARCHAR"/>
         <result property="location" column="position" jdbcType="VARCHAR"/>
     </resultMap>
+    
+    <select id="queryByTimePoint" resultMap="BaseResultMap">
+        SELECT id, device_id, usage_desc FROM device
+        WHERE id in (
+        SELECT dev_id FROM historical_status
+        WHERE DATE(create_time) &lt;= subdate(curdate(),DATE_FORMAT(CURDATE(),"%w")-#{day}) AND
+        HOUR(create_time) &lt;= #{hour} AND status != 0)
+    </select>
 
+    <!--模糊筛选-->
     <select id="queryByOptions" resultMap="DtoResultMap">
         SELECT device.id,device.device_id,device.create_time,device.usage_desc,location.position,room.name
         FROM device,device_status,location,room

@@ -14,6 +14,14 @@ import java.util.List;
 public interface DeviceDao {
 
 	/**
+	 * 通过时间点查询在线的设备列表
+	 * @param day 一周中的天数
+	 * @param hour 小时
+	 * @return 对象列表
+	 */
+	List<Device> queryByTimePoint(Integer day, Integer hour);
+
+	/**
 	 * 通过条件查询
 	 * @param usageDesc 使用描述
 	 * @param deviceId 24位设备ID

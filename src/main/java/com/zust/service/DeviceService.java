@@ -13,6 +13,14 @@ import java.util.List;
 public interface DeviceService {
 
 	/**
+	 * 通过时间点查询在线设备
+	 * @param day 一周中的第几天
+	 * @param hour 一天中的第几小时
+	 * @return 设备列表
+	 */
+	List<Device> getOnlineDeviceByTimePoint(Integer day, Integer hour);
+
+	/**
 	 * 通过设备ID删除
 	 * @param deviceId 设备ID
 	 * @return 是否成功

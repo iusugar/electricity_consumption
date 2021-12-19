@@ -76,8 +76,8 @@ public class HistoricalStatusServiceImpl implements HistoricalStatusService {
 				int total = 0;
 				if (whichDay >= 0) {
 					for (Integer id : idList) {
-						HistoricalStatus hs = historicalStatusDao.queryWeekHourOnlineByDevId(id,whichDay,j,0);
-						if (hs != null && (Boolean) hs.getStatus()) {
+						Boolean b = historicalStatusDao.queryWeekHourOnlineByDevId(id,whichDay,j,0);
+						if (b != null && b) {
 							total++;
 						}
 					}
@@ -87,7 +87,6 @@ public class HistoricalStatusServiceImpl implements HistoricalStatusService {
 			}
 			whichDay--;
 		}
-
 		return onlineData;
 	}
 
