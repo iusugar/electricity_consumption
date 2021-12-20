@@ -13,6 +13,13 @@ import java.util.List;
 public interface DeviceService {
 
 	/**
+	 * 通过网关查询设备
+	 * @param gateway 网关名
+	 * @return 对象列表
+	 */
+	List<Device> getDeviceByGateway(String gateway);
+
+	/**
 	 * 通过时间点查询在线设备
 	 * @param day 一周中的第几天
 	 * @param hour 一天中的第几小时

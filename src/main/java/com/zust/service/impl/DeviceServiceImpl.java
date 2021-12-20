@@ -1,16 +1,10 @@
 package com.zust.service.impl;
 
-import com.zust.dao.DeviceStatusDao;
-import com.zust.dao.LocationDao;
-import com.zust.dao.RoomDao;
+import com.zust.dao.*;
 import com.zust.dto.DeviceDto;
 import com.zust.dto.LocationDto;
 import com.zust.dto.RoomDto;
-import com.zust.entity.Device;
-import com.zust.dao.DeviceDao;
-import com.zust.entity.DeviceStatus;
-import com.zust.entity.Location;
-import com.zust.entity.Room;
+import com.zust.entity.*;
 import com.zust.service.DeviceService;
 import com.zust.service.LocationService;
 import lombok.extern.log4j.Log4j;
@@ -44,7 +38,20 @@ public class DeviceServiceImpl implements DeviceService {
 	private LocationDao locationDao;
 	@Resource
 	private DeviceStatusDao deviceStatusDao;
+	@Resource
+	private GatewayDao gatewayDao;
 
+
+	/**
+	 * 通过网关查询设备
+	 *
+	 * @param gateway 网关名
+	 * @return 对象列表
+	 */
+	@Override
+	public List<Device> getDeviceByGateway(String gateway) {
+		return deviceDao.queryByGateway(gateway);
+	}
 
 	/**
 	 * 通过时间点查询在线设备
@@ -199,7 +206,7 @@ public class DeviceServiceImpl implements DeviceService {
 	}
 
 	/**
-	 * 新增数据
+	 * 新增设备数据
 	 *
 	 * @param dto 传输对象
 	 * @return 实例对象
@@ -243,7 +250,8 @@ public class DeviceServiceImpl implements DeviceService {
 		} else {
 			deviceStatus.setLocaId(location.getId());
 		}
-		deviceStatus.setGwId(1);
+		Gateway gateway = gatewayDao.queryByName(dto.getGateway());
+		deviceStatus.setGwId(gateway.getId());
 		deviceStatus.setCurrentState(0);
 		deviceStatusDao.insert(deviceStatus);
 		return null;

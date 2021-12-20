@@ -85,4 +85,10 @@ public class DeviceController {
     System.out.println(day + ":" + hour);
 		return deviceService.getOnlineDeviceByTimePoint(day,hour);
 	}
+	// 返回指定网关下的设备
+	@GetMapping("getByGateway")
+	public List<Device> getDeviceByGateway(String gateway) {
+    System.out.println(gateway);
+		return deviceService.getDeviceByGateway(gateway);
+	}
 }

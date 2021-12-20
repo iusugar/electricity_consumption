@@ -27,7 +27,19 @@
         <result property="roomNum" column="name" jdbcType="VARCHAR"/>
         <result property="location" column="position" jdbcType="VARCHAR"/>
     </resultMap>
-    
+
+    <!--通过网关查找-->
+    <select id="queryByGateway" resultMap="BaseResultMap">
+        select
+            device.id,device_id,device.create_time
+        from device,device_status
+        WHERE device_status.dev_id = device.id AND gw_id = (
+            SELECT id
+            FROM gateway
+            WHERE name=#{gateway})
+    </select>
+
+    <!--通过时间点查询设备-->
     <select id="queryByTimePoint" resultMap="BaseResultMap">
         SELECT id, device_id, usage_desc FROM device
         WHERE id in (

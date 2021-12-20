@@ -39,4 +39,7 @@ public class DeviceDto {
 	private int elecConsum;
 	private int infraredFunc;
 
+	// 网关
+	private String gateway;
+
 }

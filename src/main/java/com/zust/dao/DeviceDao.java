@@ -14,6 +14,13 @@ import java.util.List;
 public interface DeviceDao {
 
 	/**
+	 * 通过网关名字查询设备
+	 * @param gateway 网关名
+	 * @return 对象列表
+	 */
+	List<Device> queryByGateway(String gateway);
+
+	/**
 	 * 通过时间点查询在线的设备列表
 	 * @param day 一周中的天数
 	 * @param hour 小时
