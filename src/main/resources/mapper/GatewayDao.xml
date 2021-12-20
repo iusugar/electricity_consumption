@@ -11,6 +11,20 @@
         <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
+    <select id="queryByName" resultMap="BaseResultMap">
+        select
+            id, name, description, update_time, create_time
+        from electricity_consumption.gateway
+        where name = #{name}
+    </select>
+
+    <!--查询所有网关-->
+    <select id="queryAllGateWay" resultMap="BaseResultMap">
+        select
+            id, name, description, update_time, create_time
+        from electricity_consumption.gateway
+    </select>
+
     <!--查询单个-->
     <select id="queryById" resultMap="BaseResultMap">
         select

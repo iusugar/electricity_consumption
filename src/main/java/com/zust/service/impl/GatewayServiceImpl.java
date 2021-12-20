@@ -16,64 +16,74 @@ import java.util.List;
  */
 @Service("gatewayService")
 public class GatewayServiceImpl implements GatewayService {
-    @Resource
-    private GatewayDao gatewayDao;
+  @Resource
+  private GatewayDao gatewayDao;
 
-    /**
-     * 通过ID查询单条数据
-     *
-     * @param id 主键
-     * @return 实例对象
-     */
-    @Override
-    public Gateway queryById(Integer id) {
-        return this.gatewayDao.queryById(id);
-    }
+	/**
+	 * 查询所有网关
+	 *
+	 * @return 对象列表
+	 */
+	@Override
+	public List<Gateway> getAllGateway() {
+		return gatewayDao.queryAllGateWay();
+	}
 
-    /**
-     * 查询多条数据
-     *
-     * @param offset 查询起始位置
-     * @param limit 查询条数
-     * @return 对象列表
-     */
-    @Override
-    public List<Gateway> queryAllByLimit(int offset, int limit) {
-        return this.gatewayDao.queryAllByLimit(offset, limit);
-    }
+	/**
+   * 通过ID查询单条数据
+   *
+   * @param id 主键
+   * @return 实例对象
+   */
+  @Override
+  public Gateway queryById(Integer id) {
+      return this.gatewayDao.queryById(id);
+  }
 
-    /**
-     * 新增数据
-     *
-     * @param gateway 实例对象
-     * @return 实例对象
-     */
-    @Override
-    public Gateway insert(Gateway gateway) {
-        this.gatewayDao.insert(gateway);
-        return gateway;
-    }
+  /**
+   * 查询多条数据
+   *
+   * @param offset 查询起始位置
+   * @param limit 查询条数
+   * @return 对象列表
+   */
+  @Override
+  public List<Gateway> queryAllByLimit(int offset, int limit) {
+      return this.gatewayDao.queryAllByLimit(offset, limit);
+  }
 
-    /**
-     * 修改数据
-     *
-     * @param gateway 实例对象
-     * @return 实例对象
-     */
-    @Override
-    public Gateway update(Gateway gateway) {
-        this.gatewayDao.update(gateway);
-        return this.queryById(gateway.getId());
-    }
+  /**
+   * 新增数据
+   *
+   * @param gateway 实例对象
+   * @return 实例对象
+   */
+  @Override
+  public Gateway insert(Gateway gateway) {
+      this.gatewayDao.insert(gateway);
+      return gateway;
+  }
 
-    /**
-     * 通过主键删除数据
-     *
-     * @param id 主键
-     * @return 是否成功
-     */
-    @Override
-    public boolean deleteById(Integer id) {
-        return this.gatewayDao.deleteById(id) > 0;
-    }
+  /**
+   * 修改数据
+   *
+   * @param gateway 实例对象
+   * @return 实例对象
+   */
+  @Override
+  public Gateway update(Gateway gateway) {
+      this.gatewayDao.update(gateway);
+      return this.queryById(gateway.getId());
+  }
+
+  /**
+   * 通过主键删除数据
+   *
+   * @param id 主键
+   * @return 是否成功
+   */
+  @Override
+  public boolean deleteById(Integer id) {
+      return this.gatewayDao.deleteById(id) > 0;
+  }
 }
