@@ -38,6 +38,8 @@ class ElectricityConsumptionApplicationTests {
 	HistoricalStatusService hsService;
 	@Resource
 	LocationDao locationDao;
+	@Resource
+	GatewayDao gatewayDao;
 
 
   @Test
@@ -141,9 +143,21 @@ class ElectricityConsumptionApplicationTests {
 
 	@Test
 	void testGetHourOnline() {
-//		hsService.getWeekHourOnlineCount();
-//		Boolean b = hsd.queryWeekHourOnlineByDevId(88,3,16,0);
-//    System.out.println(b);
-//		deviceDao.queryByTimePoint(3,16);
+		hsService.getWeekHourOnlineCount();
+		Boolean b = hsd.queryWeekHourOnlineByDevId(88,3,16,0);
+    System.out.println(b);
+		deviceDao.queryByTimePoint(3,16);
+	}
+
+	@Test
+	void testGetAllGateway() {
+		List<Gateway> l = gatewayDao.queryAllGateWay();
+    l.forEach(System.out::println);
+	}
+
+	@Test
+	void testGetGatewayByName() {
+		Gateway gateway = gatewayDao.queryByName("KBOXTEST0002");
+    System.out.println(gateway);
 	}
 }
