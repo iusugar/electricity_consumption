@@ -40,7 +40,7 @@ public class HistoricalStatusController {
 		return historicalStatusService.getWeekHourOnlineCount();
 	}
 
-	// 返回设备上下线记录
+	// 返回指定设备上下线记录
 	@GetMapping("deviceActivitiesData")
 	public List<HistoricalStatus> getDeviceActivitiesHistoricalData(Integer id) {
 		return historicalStatusService.getActivitiesHistoriesData(id);

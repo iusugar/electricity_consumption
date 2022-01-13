@@ -103,12 +103,12 @@
         (select consumption
          FROM electricity_data
          WHERE dev_id = #{devId} AND MONTH(create_time) = MONTH(DATE_ADD(CURRENT_DATE,interval -1 MONTH))
-            AND YEAR(DATE_ADD(create_time,interval -1 MONTH)) = YEAR(CURRENT_DATE)
+--             AND YEAR(DATE_ADD(create_time,interval -1 MONTH)) = YEAR(CURRENT_DATE)
          ORDER BY id DESC LIMIT 1) -
         (select consumption
          FROM electricity_data
          WHERE dev_id = #{devId} AND MONTH(create_time) = MONTH(DATE_ADD(CURRENT_DATE,interval -1 MONTH))
-         AND YEAR(DATE_ADD(create_time,interval -1 MONTH)) = YEAR(CURRENT_DATE)
+--          AND YEAR(DATE_ADD(create_time,interval -1 MONTH)) = YEAR(CURRENT_DATE)
          LIMIT 1)
     </select>
 
